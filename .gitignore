@@ -1,0 +1,28 @@
+# Environment files - NEVER COMMIT
+.env
+.env.*
+!.env.example
+credentials/.env*
+!credentials/.env.example
+!credentials/.env.template
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.key
+*.pem
+*-credentials.json
+*-secrets.json
