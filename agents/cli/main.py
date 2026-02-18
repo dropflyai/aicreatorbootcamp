@@ -93,40 +93,84 @@ def orchestrate(task: str, context: Optional[str], verbose: bool):
 
 
 @cli.command()
-@click.argument("brain", type=click.Choice(["engineering", "design", "mba"]))
+@click.argument("brain", type=str)
 @click.argument("task")
 @click.option("--context", "-c", help="Additional context")
 @click.option("--model", "-m", help="Override model")
-def run(brain: str, task: str, context: Optional[str], model: Optional[str]):
-    """Run a task with a specific specialist agent.
+@click.option("--direct", "-d", is_flag=True, help="Bypass CEO (direct to specialist)")
+def run(brain: str, task: str, context: Optional[str], model: Optional[str], direct: bool):
+    """Run a task (routes through CEO Brain by default).
+
+    All tasks are orchestrated by CEO Brain unless --direct flag is used.
 
     Example:
         px1000 run engineering "Create a REST API endpoint"
         px1000 run design "Design a login form"
+        px1000 run marketing "Create a launch campaign"
     """
+    from agents.ceo import CEOAgent
     from agents.specialists import SpecialistFactory
 
-    console.print(Panel(f"[bold]{brain.upper()} Brain[/bold]\n{task}", title="Running"))
+    if direct:
+        # Direct mode: bypass CEO, go straight to specialist
+        console.print(Panel(
+            f"[bold]{brain.upper()} Brain[/bold]\n{task}",
+            title="Direct Mode (Bypassing CEO)",
+        ))
 
-    try:
-        agent = SpecialistFactory.create(brain, model=model)
-        result = agent.run(task, context)
+        try:
+            agent = SpecialistFactory.create(brain, model=model)
+            result = agent.run(task, context)
 
-        if result.success:
+            if result.success:
+                console.print(Panel(
+                    Markdown(result.content),
+                    title="Result",
+                    border_style="green",
+                ))
+            else:
+                console.print(f"[red]Error: {result.error}[/red]")
+
+            if result.tokens_used:
+                console.print(f"[dim]Tokens used: {result.tokens_used}[/dim]")
+
+        except Exception as e:
+            console.print(f"[red]Error: {str(e)}[/red]")
+            raise click.Abort()
+    else:
+        # Default: route through CEO Brain
+        console.print(Panel(
+            f"[yellow]Routing through CEO Brain[/yellow]\n"
+            f"[dim]Requested brain: {brain}[/dim]\n"
+            f"[bold]Task:[/bold] {task}",
+            title="CEO Orchestration",
+        ))
+
+        try:
+            ceo = CEOAgent(model=model)
+            enhanced_context = f"User specifically requested the {brain} brain for this task."
+            if context:
+                enhanced_context += f"\n\nAdditional context: {context}"
+
+            result = ceo.orchestrate(task, context=enhanced_context)
+
+            if result.success:
+                console.print("[green]Task completed successfully![/green]\n")
+            else:
+                console.print("[red]Task completed with errors[/red]\n")
+
             console.print(Panel(
-                Markdown(result.content),
+                Markdown(result.final_synthesis),
                 title="Result",
-                border_style="green",
+                border_style="green" if result.success else "red",
             ))
-        else:
-            console.print(f"[red]Error: {result.error}[/red]")
 
-        if result.tokens_used:
-            console.print(f"[dim]Tokens used: {result.tokens_used}[/dim]")
+            if result.brains_used:
+                console.print(f"\n[dim]Brains used: {', '.join(result.brains_used)}[/dim]")
 
-    except Exception as e:
-        console.print(f"[red]Error: {str(e)}[/red]")
-        raise click.Abort()
+        except Exception as e:
+            console.print(f"[red]Error: {str(e)}[/red]")
+            raise click.Abort()
 
 
 @cli.command("build-brain")
@@ -325,30 +369,45 @@ def runs(brain: Optional[str], limit: int, success_only: bool):
 
 @cli.command()
 def brains():
-    """List available brains and their status."""
+    """List all 37 brains and their status."""
     from agents.specialists import SpecialistFactory
     from agents.core import BrainLoader
 
-    console.print("[bold]Available Brains[/bold]\n")
-
-    table = Table()
-    table.add_column("Brain")
-    table.add_column("Status")
-    table.add_column("Description")
+    console.print("[bold]Available Brains (37 Total)[/bold]\n")
+    console.print("[dim]All tasks route through CEO Brain for orchestration.[/dim]\n")
 
     loader = BrainLoader()
     available = loader.get_available_brains()
 
-    for brain in ["engineering", "design", "mba", "options_trading", "product", "ceo"]:
-        if brain in available:
-            status = "[green]Available[/green]"
-        else:
-            status = "[yellow]Placeholder[/yellow]"
+    # Group brains by tier
+    tiers = {
+        "Core (Complete)": ["engineering", "design", "mba", "options_trading", "ceo"],
+        "Business & Strategy": ["finance", "operations", "legal"],
+        "Product & Design": ["product", "game_design", "content", "localization"],
+        "Growth & Revenue": ["marketing", "sales", "growth", "partnership", "customer_success"],
+        "Technical": ["data", "security", "cloud", "mobile", "qa", "ai", "automation", "analytics", "devrel"],
+        "Marketing Channels": ["branding", "email", "social_media", "video", "community"],
+        "Business Operations": ["support", "investor", "pricing", "innovation"],
+        "People": ["hr", "research"],
+    }
 
-        desc = SpecialistFactory.get_description(brain) if brain in SpecialistFactory.SPECIALISTS else "-"
-        table.add_row(brain, status, desc[:50])
+    for tier_name, brain_list in tiers.items():
+        table = Table(title=tier_name, show_header=True)
+        table.add_column("Brain", style="cyan")
+        table.add_column("Status", width=12)
+        table.add_column("Description")
 
-    console.print(table)
+        for brain in brain_list:
+            if brain in available:
+                status = "[green]Ready[/green]"
+            else:
+                status = "[yellow]Pending[/yellow]"
+
+            desc = SpecialistFactory.get_description(brain)
+            table.add_row(brain, status, desc[:55])
+
+        console.print(table)
+        console.print("")  # spacing
 
 
 @cli.command()

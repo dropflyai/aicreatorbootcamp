@@ -11,11 +11,51 @@ class BrainLoader:
     BRAINS_ROOT = Path(__file__).parent.parent.parent  # prototype_x1000/
 
     BRAIN_PATHS = {
+        # Tier 1: Complete
         "engineering": "engineering_brain",
         "design": "design_brain",
         "mba": "mba_brain",
         "options_trading": "options_trading_brain",
         "ceo": "ceo_brain",
+        # Tier 2: Business & Strategy
+        "finance": "finance_brain",
+        "operations": "operations_brain",
+        "legal": "legal_brain",
+        # Tier 3: Product & Design
+        "product": "product_brain",
+        "game_design": "game_design_brain",
+        "content": "content_brain",
+        "localization": "localization_brain",
+        # Tier 4: Growth & Revenue
+        "marketing": "marketing_brain",
+        "sales": "sales_brain",
+        "growth": "growth_brain",
+        "partnership": "partnership_brain",
+        "customer_success": "customer_success_brain",
+        # Tier 5: Technical
+        "data": "data_brain",
+        "security": "security_brain",
+        "cloud": "cloud_brain",
+        "mobile": "mobile_brain",
+        "qa": "qa_brain",
+        "ai": "ai_brain",
+        "automation": "automation_brain",
+        "analytics": "analytics_brain",
+        "devrel": "devrel_brain",
+        # Tier 6: Marketing Channels
+        "branding": "branding_brain",
+        "email": "email_brain",
+        "social_media": "social_media_brain",
+        "video": "video_brain",
+        "community": "community_brain",
+        # Tier 7: Business Operations
+        "support": "support_brain",
+        "investor": "investor_brain",
+        "pricing": "pricing_brain",
+        "innovation": "innovation_brain",
+        # Tier 8: People
+        "hr": "hr_brain",
+        "research": "research_brain",
     }
 
     def __init__(self):

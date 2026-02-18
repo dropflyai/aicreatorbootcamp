@@ -36,13 +36,60 @@ class TaskDecomposer:
 
 Your job is to analyze user requests and break them into subtasks that can be handled by specialist agents.
 
-## Available Specialist Brains
+## Available Specialist Brains (37 Total)
 
+### Core Brains (Complete)
 1. **engineering** - Code, APIs, databases, infrastructure, DevOps, automation, testing
 2. **design** - UI/UX, visual design, user research, information architecture, branding
 3. **mba** - Business strategy, operations, financial analysis, market research, leadership
-4. **options_trading** - Trading algorithms, market analysis, options pricing
-5. **product** - Product strategy, roadmapping, feature prioritization, PRDs
+4. **options_trading** - Trading algorithms, market analysis, options strategies
+5. **ceo** - Orchestration (this is you - do not assign tasks to yourself)
+
+### Business & Strategy
+6. **finance** - Accounting, budgeting, financial modeling, fundraising
+7. **operations** - Supply chain, logistics, process optimization
+8. **legal** - Contracts, compliance, IP protection, regulatory
+
+### Product & Design
+9. **product** - Product strategy, roadmapping, feature prioritization, PRDs
+10. **game_design** - Game mechanics, level design, player psychology
+11. **content** - Copywriting, content strategy, SEO, storytelling
+12. **localization** - i18n, l10n, regional adaptation, translation
+
+### Growth & Revenue
+13. **marketing** - Growth, acquisition, retention, brand positioning
+14. **sales** - Sales process, objection handling, closing, pipeline
+15. **growth** - Growth hacking, viral loops, referrals, PLG
+16. **partnership** - Business development, alliances, integrations
+17. **customer_success** - Onboarding, retention, support, churn prevention
+
+### Technical
+18. **data** - Analytics, ML/AI, data pipelines, warehousing
+19. **security** - Cybersecurity, compliance, risk management, auditing
+20. **cloud** - AWS, GCP, Azure, serverless, infrastructure
+21. **mobile** - iOS, Android, React Native, mobile-first
+22. **qa** - Testing strategies, automation, quality gates
+23. **ai** - LLMs, ML models, AI strategy, prompting
+24. **automation** - Workflow automation, n8n, Zapier, integrations
+25. **analytics** - Metrics, dashboards, reporting, insights
+26. **devrel** - Developer relations, documentation, community
+
+### Marketing Channels
+27. **branding** - Brand identity, visual systems, brand voice
+28. **email** - Email marketing, drip campaigns, deliverability
+29. **social_media** - Social platforms, content calendar, engagement
+30. **video** - Video content, production, distribution
+31. **community** - Community building, moderation, engagement
+
+### Business Operations
+32. **support** - Customer support, ticketing, knowledge base
+33. **investor** - Fundraising, investor relations, pitch decks
+34. **pricing** - Pricing strategy, packaging, monetization
+35. **innovation** - R&D, new ventures, experimentation
+
+### People
+36. **hr** - Hiring, culture, team building, performance
+37. **research** - Market research, competitor analysis, trends
 
 ## Rules
 
@@ -248,78 +295,138 @@ Now analyze the following task and provide decomposition:
         """
         task_lower = task.lower()
 
-        # Keyword matching for quick routing
+        # Keyword matching for quick routing (ordered by specificity)
+
+        # Technical brains
+        if any(kw in task_lower for kw in ["ai", "llm", "prompt", "ml", "machine learning"]):
+            return "ai"
+
+        if any(kw in task_lower for kw in ["security", "pentest", "vulnerability", "audit"]):
+            return "security"
+
+        if any(kw in task_lower for kw in ["cloud", "aws", "gcp", "azure", "kubernetes", "docker"]):
+            return "cloud"
+
+        if any(kw in task_lower for kw in ["mobile", "ios", "android", "react native", "flutter"]):
+            return "mobile"
+
+        if any(kw in task_lower for kw in ["qa", "test", "testing", "quality"]):
+            return "qa"
+
+        if any(kw in task_lower for kw in ["data", "analytics", "pipeline", "warehouse"]):
+            return "data"
+
+        if any(kw in task_lower for kw in ["automation", "workflow", "zapier", "n8n"]):
+            return "automation"
+
         if any(
             kw in task_lower
             for kw in [
-                "code",
-                "api",
-                "database",
-                "deploy",
-                "bug",
-                "test",
-                "backend",
-                "frontend",
-                "server",
-                "endpoint",
+                "code", "api", "database", "deploy", "bug", "backend",
+                "frontend", "server", "endpoint",
             ]
         ):
             return "engineering"
 
+        # Design brains
         if any(
             kw in task_lower
             for kw in [
-                "design",
-                "ui",
-                "ux",
-                "layout",
-                "color",
-                "font",
-                "wireframe",
-                "mockup",
-                "component",
+                "design", "ui", "ux", "layout", "color", "font",
+                "wireframe", "mockup", "component",
             ]
         ):
             return "design"
 
+        if any(kw in task_lower for kw in ["brand", "branding", "logo", "identity"]):
+            return "branding"
+
+        if any(kw in task_lower for kw in ["game", "gameplay", "level design", "mechanics"]):
+            return "game_design"
+
+        # Growth & Revenue brains
+        if any(kw in task_lower for kw in ["marketing", "campaign", "advertising", "ads"]):
+            return "marketing"
+
+        if any(kw in task_lower for kw in ["sales", "selling", "close", "deal", "pipeline"]):
+            return "sales"
+
+        if any(kw in task_lower for kw in ["growth", "viral", "referral", "plg"]):
+            return "growth"
+
+        if any(kw in task_lower for kw in ["partnership", "partner", "alliance"]):
+            return "partnership"
+
+        if any(kw in task_lower for kw in ["customer success", "onboarding", "churn"]):
+            return "customer_success"
+
+        # Marketing channels
+        if any(kw in task_lower for kw in ["email", "newsletter", "drip"]):
+            return "email"
+
+        if any(kw in task_lower for kw in ["social media", "twitter", "instagram", "linkedin", "tiktok"]):
+            return "social_media"
+
+        if any(kw in task_lower for kw in ["video", "youtube", "production"]):
+            return "video"
+
+        if any(kw in task_lower for kw in ["community", "discord", "slack", "forum"]):
+            return "community"
+
+        if any(kw in task_lower for kw in ["content", "copywriting", "blog", "article", "seo"]):
+            return "content"
+
+        # Business brains
+        if any(kw in task_lower for kw in ["finance", "accounting", "budget", "financial"]):
+            return "finance"
+
+        if any(kw in task_lower for kw in ["legal", "contract", "compliance", "ip"]):
+            return "legal"
+
+        if any(kw in task_lower for kw in ["operations", "supply chain", "logistics"]):
+            return "operations"
+
+        if any(kw in task_lower for kw in ["investor", "fundraise", "pitch deck", "vc"]):
+            return "investor"
+
+        if any(kw in task_lower for kw in ["pricing", "monetization", "subscription"]):
+            return "pricing"
+
+        if any(kw in task_lower for kw in ["support", "help desk", "ticket"]):
+            return "support"
+
+        if any(kw in task_lower for kw in ["hr", "hiring", "recruit", "culture", "team"]):
+            return "hr"
+
+        if any(kw in task_lower for kw in ["research", "competitor", "market research"]):
+            return "research"
+
+        # Product
         if any(
             kw in task_lower
             for kw in [
-                "business",
-                "strategy",
-                "market",
-                "revenue",
-                "pricing",
-                "competitor",
-                "operations",
+                "product", "roadmap", "feature", "prd", "requirements", "priorit",
             ]
         ):
-            return "mba"
+            return "product"
 
+        # Trading
         if any(
             kw in task_lower
             for kw in [
-                "trade",
-                "option",
-                "stock",
-                "portfolio",
-                "market analysis",
+                "trade", "option", "stock", "portfolio", "market analysis",
             ]
         ):
             return "options_trading"
 
+        # Business strategy
         if any(
             kw in task_lower
             for kw in [
-                "product",
-                "roadmap",
-                "feature",
-                "prd",
-                "requirements",
-                "priorit",
+                "business", "strategy", "market", "revenue", "competitor",
             ]
         ):
-            return "product"
+            return "mba"
 
         # Default to engineering for technical tasks
         return "engineering"

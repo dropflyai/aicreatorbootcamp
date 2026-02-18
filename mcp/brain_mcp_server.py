@@ -79,14 +79,13 @@ if MCP_AVAILABLE:
         return [
             Tool(
                 name="run_agent",
-                description="Run a specialist brain agent on a task",
+                description="Run a task (routes through CEO Brain for orchestration). Specify a brain_type hint to suggest which specialist should handle it.",
                 inputSchema={
                     "type": "object",
                     "properties": {
                         "brain_type": {
                             "type": "string",
-                            "enum": ["engineering", "design", "mba", "ceo"],
-                            "description": "The brain agent to run",
+                            "description": "Brain type hint (optional). CEO will route appropriately. Options: engineering, design, mba, product, marketing, sales, finance, legal, security, cloud, mobile, qa, ai, data, analytics, content, etc.",
                         },
                         "task": {
                             "type": "string",
@@ -96,8 +95,13 @@ if MCP_AVAILABLE:
                             "type": "string",
                             "description": "Additional context (optional)",
                         },
+                        "direct": {
+                            "type": "boolean",
+                            "description": "If true, bypass CEO and go directly to specialist (not recommended)",
+                            "default": False,
+                        },
                     },
-                    "required": ["brain_type", "task"],
+                    "required": ["task"],
                 },
             ),
             Tool(
@@ -200,26 +204,47 @@ if MCP_AVAILABLE:
         """Execute a tool."""
         try:
             if name == "run_agent":
-                brain_type = arguments["brain_type"]
+                brain_hint = arguments.get("brain_type", "")
                 task = arguments["task"]
-                context = arguments.get("context")
+                context = arguments.get("context", "")
+                direct = arguments.get("direct", False)
 
-                if brain_type == "ceo":
-                    agent = get_ceo_agent()
+                if direct and brain_hint:
+                    # Direct mode: bypass CEO, go straight to specialist
+                    agent = get_specialist(brain_hint)
+                    result = agent.run(task, context)
+
+                    return [TextContent(
+                        type="text",
+                        text=json.dumps({
+                            "mode": "direct",
+                            "brain_used": brain_hint,
+                            "success": result.success,
+                            "content": result.content,
+                            "error": result.error,
+                            "tokens_used": result.tokens_used,
+                        }, indent=2),
+                    )]
                 else:
-                    agent = get_specialist(brain_type)
+                    # Default: route through CEO Brain
+                    ceo = get_ceo_agent()
+                    enhanced_context = context or ""
 
-                result = agent.run(task, context)
+                    if brain_hint and brain_hint != "ceo":
+                        enhanced_context = f"User requested {brain_hint} brain for this task.\n{enhanced_context}"
 
-                return [TextContent(
-                    type="text",
-                    text=json.dumps({
-                        "success": result.success,
-                        "content": result.content,
-                        "error": result.error,
-                        "tokens_used": result.tokens_used,
-                    }, indent=2),
-                )]
+                    result = ceo.orchestrate(task, enhanced_context if enhanced_context else None)
+
+                    return [TextContent(
+                        type="text",
+                        text=json.dumps({
+                            "mode": "ceo_orchestrated",
+                            "success": result.success,
+                            "final_synthesis": result.final_synthesis,
+                            "brains_used": result.brains_used,
+                            "subtask_count": len(result.subtask_results),
+                        }, indent=2),
+                    )]
 
             elif name == "orchestrate":
                 task = arguments["task"]
@@ -305,13 +330,20 @@ if MCP_AVAILABLE:
                 loader = BrainLoader()
                 available = loader.get_available_brains()
 
-                brains_info = []
-                for brain in ["engineering", "design", "mba", "options_trading", "product", "ceo"]:
-                    brains_info.append({
+                # All 37 brains organized by tier
+                all_brains = list(loader.BRAIN_PATHS.keys())
+
+                brains_info = {
+                    "total_brains": 37,
+                    "orchestration": "All tasks route through CEO Brain",
+                    "brains": []
+                }
+
+                for brain in all_brains:
+                    brains_info["brains"].append({
                         "name": brain,
-                        "status": "available" if brain in available else "placeholder",
-                        "description": SpecialistFactory.get_description(brain)
-                        if brain in SpecialistFactory.SPECIALISTS else "Not implemented",
+                        "status": "ready" if brain in available else "pending",
+                        "description": SpecialistFactory.get_description(brain),
                     })
 
                 return [TextContent(
