@@ -49,6 +49,7 @@ def _make_loader_with_cached_brain() -> BrainLoader:
 # BrainLoader.load_brain (cached)
 # ---------------------------------------------------------------------------
 
+
 class TestBrainLoaderCachedBenchmark:
     """Benchmark: cached ``load_brain`` should be sub-millisecond."""
 
@@ -68,6 +69,7 @@ class TestBrainLoaderCachedBenchmark:
 # BrainLoader.build_system_prompt
 # ---------------------------------------------------------------------------
 
+
 class TestBuildSystemPromptBenchmark:
     """Benchmark: ``build_system_prompt`` with cached content."""
 
@@ -83,6 +85,7 @@ class TestBuildSystemPromptBenchmark:
 # ---------------------------------------------------------------------------
 # BrainSelector.select_brain
 # ---------------------------------------------------------------------------
+
 
 class TestSelectBrainBenchmark:
     """Benchmark: single-brain keyword matching."""
@@ -103,6 +106,7 @@ class TestSelectBrainBenchmark:
 # BrainSelector.select_brains (multi-brain)
 # ---------------------------------------------------------------------------
 
+
 class TestSelectBrainsBenchmark:
     """Benchmark: multi-brain keyword matching."""
 
@@ -122,6 +126,7 @@ class TestSelectBrainsBenchmark:
 # ---------------------------------------------------------------------------
 # TaskDecomposer.is_simple_task
 # ---------------------------------------------------------------------------
+
 
 class TestIsSimpleTaskBenchmark:
     """Benchmark: heuristic task complexity evaluation."""

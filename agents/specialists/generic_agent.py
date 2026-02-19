@@ -1,6 +1,5 @@
 """Generic specialist agent for brains without custom implementations."""
 
-
 from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
 
@@ -47,7 +46,7 @@ class GenericSpecialistAgent(BaseAgent):
         Returns:
             Instructions string appended to the system prompt.
         """
-        return f"""You are the {self.brain_name.replace('_', ' ').title()} specialist agent.
+        return f"""You are the {self.brain_name.replace("_", " ").title()} specialist agent.
 
 Your role is to execute tasks within your domain of expertise as defined by your CLAUDE.md guidance.
 

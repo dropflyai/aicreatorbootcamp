@@ -1,6 +1,5 @@
 """MBA Agent - Business strategy and operations specialist."""
 
-
 from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
 
@@ -249,7 +248,7 @@ Output format:
 {value_proposition}
 
 ## Customer Segments
-{chr(10).join(f'- {s}' for s in segments)}
+{chr(10).join(f"- {s}" for s in segments)}
 
 ## Channels
 - [ ] Website / Landing page
@@ -390,12 +389,31 @@ Minimize weaknesses and avoid threats.
         Returns:
             Unit economics analysis.
         """
-        ltv = average_revenue_per_user * average_lifespan_months * (gross_margin_percent / 100)
-        ltv_cac_ratio = ltv / customer_acquisition_cost if customer_acquisition_cost > 0 else 0
-        payback_months = customer_acquisition_cost / (average_revenue_per_user * (gross_margin_percent / 100)) if average_revenue_per_user > 0 else 0
-        monthly_churn = (1 / average_lifespan_months) * 100 if average_lifespan_months > 0 else 0
+        ltv = (
+            average_revenue_per_user
+            * average_lifespan_months
+            * (gross_margin_percent / 100)
+        )
+        ltv_cac_ratio = (
+            ltv / customer_acquisition_cost if customer_acquisition_cost > 0 else 0
+        )
+        payback_months = (
+            customer_acquisition_cost
+            / (average_revenue_per_user * (gross_margin_percent / 100))
+            if average_revenue_per_user > 0
+            else 0
+        )
+        monthly_churn = (
+            (1 / average_lifespan_months) * 100 if average_lifespan_months > 0 else 0
+        )
 
-        health = "Healthy" if ltv_cac_ratio >= 3 else "Needs improvement" if ltv_cac_ratio >= 1 else "Unsustainable"
+        health = (
+            "Healthy"
+            if ltv_cac_ratio >= 3
+            else "Needs improvement"
+            if ltv_cac_ratio >= 1
+            else "Unsustainable"
+        )
 
         return f"""# Unit Economics Analysis
 
@@ -413,7 +431,7 @@ Minimize weaknesses and avoid threats.
 **${ltv:.2f}**
 
 LTV = ARPU × Lifespan × Gross Margin
-LTV = ${average_revenue_per_user:.2f} × {average_lifespan_months:.0f} × {gross_margin_percent/100:.2f} = ${ltv:.2f}
+LTV = ${average_revenue_per_user:.2f} × {average_lifespan_months:.0f} × {gross_margin_percent / 100:.2f} = ${ltv:.2f}
 
 ### LTV:CAC Ratio
 **{ltv_cac_ratio:.1f}x** — {health}
@@ -586,7 +604,9 @@ Define clear positioning statement:
                 "alternatives_considered": json.dumps(alternatives_considered or []),
             }
 
-            self._memory_client.client.table("mba_strategic_decisions").insert(data).execute()
+            self._memory_client.client.table("mba_strategic_decisions").insert(
+                data
+            ).execute()
             return f"Strategic decision logged for {project_id}"
 
         except Exception as e:

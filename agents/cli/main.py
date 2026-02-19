@@ -77,11 +77,13 @@ def orchestrate(task: str, context: str | None, verbose: bool):
         else:
             console.print("[red]Task completed with errors[/red]\n")
 
-        console.print(Panel(
-            Markdown(result.final_synthesis),
-            title="Result",
-            border_style="green" if result.success else "red",
-        ))
+        console.print(
+            Panel(
+                Markdown(result.final_synthesis),
+                title="Result",
+                border_style="green" if result.success else "red",
+            )
+        )
 
         if verbose and result.brains_used:
             console.print(f"\n[dim]Brains used: {', '.join(result.brains_used)}[/dim]")
@@ -112,21 +114,25 @@ def run(brain: str, task: str, context: str | None, model: str | None, direct: b
 
     if direct:
         # Direct mode: bypass CEO, go straight to specialist
-        console.print(Panel(
-            f"[bold]{brain.upper()} Brain[/bold]\n{task}",
-            title="Direct Mode (Bypassing CEO)",
-        ))
+        console.print(
+            Panel(
+                f"[bold]{brain.upper()} Brain[/bold]\n{task}",
+                title="Direct Mode (Bypassing CEO)",
+            )
+        )
 
         try:
             agent = SpecialistFactory.create(brain, model=model)
             result = agent.run(task, context)
 
             if result.success:
-                console.print(Panel(
-                    Markdown(result.content),
-                    title="Result",
-                    border_style="green",
-                ))
+                console.print(
+                    Panel(
+                        Markdown(result.content),
+                        title="Result",
+                        border_style="green",
+                    )
+                )
             else:
                 console.print(f"[red]Error: {result.error}[/red]")
 
@@ -138,16 +144,20 @@ def run(brain: str, task: str, context: str | None, model: str | None, direct: b
             raise click.Abort() from e
     else:
         # Default: route through CEO Brain
-        console.print(Panel(
-            f"[yellow]Routing through CEO Brain[/yellow]\n"
-            f"[dim]Requested brain: {brain}[/dim]\n"
-            f"[bold]Task:[/bold] {task}",
-            title="CEO Orchestration",
-        ))
+        console.print(
+            Panel(
+                f"[yellow]Routing through CEO Brain[/yellow]\n"
+                f"[dim]Requested brain: {brain}[/dim]\n"
+                f"[bold]Task:[/bold] {task}",
+                title="CEO Orchestration",
+            )
+        )
 
         try:
             ceo = CEOAgent(model=model)
-            enhanced_context = f"User specifically requested the {brain} brain for this task."
+            enhanced_context = (
+                f"User specifically requested the {brain} brain for this task."
+            )
             if context:
                 enhanced_context += f"\n\nAdditional context: {context}"
 
@@ -158,14 +168,18 @@ def run(brain: str, task: str, context: str | None, model: str | None, direct: b
             else:
                 console.print("[red]Task completed with errors[/red]\n")
 
-            console.print(Panel(
-                Markdown(result.final_synthesis),
-                title="Result",
-                border_style="green" if result.success else "red",
-            ))
+            console.print(
+                Panel(
+                    Markdown(result.final_synthesis),
+                    title="Result",
+                    border_style="green" if result.success else "red",
+                )
+            )
 
             if result.brains_used:
-                console.print(f"\n[dim]Brains used: {', '.join(result.brains_used)}[/dim]")
+                console.print(
+                    f"\n[dim]Brains used: {', '.join(result.brains_used)}[/dim]"
+                )
 
         except Exception as e:
             console.print(f"[red]Error: {str(e)}[/red]")
@@ -175,7 +189,13 @@ def run(brain: str, task: str, context: str | None, model: str | None, direct: b
 @cli.command("build-brain")
 @click.argument("brain_name")
 @click.option("--domain", "-d", required=True, help="Domain of expertise")
-@click.option("--capabilities", "-c", multiple=True, required=True, help="Capabilities (can repeat)")
+@click.option(
+    "--capabilities",
+    "-c",
+    multiple=True,
+    required=True,
+    help="Capabilities (can repeat)",
+)
 @click.option("--role", "-r", help="Senior role title")
 @click.option("--dry-run", is_flag=True, help="Validate only, don't create")
 def build_brain(
@@ -193,12 +213,14 @@ def build_brain(
     """
     from agents.brain_builder import BrainBuilderAgent
 
-    console.print(Panel(
-        f"[bold]Building:[/bold] {brain_name}_brain\n"
-        f"[dim]Domain:[/dim] {domain}\n"
-        f"[dim]Capabilities:[/dim] {len(capabilities)} defined",
-        title="Brain Builder",
-    ))
+    console.print(
+        Panel(
+            f"[bold]Building:[/bold] {brain_name}_brain\n"
+            f"[dim]Domain:[/dim] {domain}\n"
+            f"[dim]Capabilities:[/dim] {len(capabilities)} defined",
+            title="Brain Builder",
+        )
+    )
 
     try:
         builder = BrainBuilderAgent()
@@ -208,6 +230,7 @@ def build_brain(
 
             # Just validate template
             from agents.brain_builder import QualityValidator
+
             validator = QualityValidator()
             template = validator.get_template_structure()
             console.print(Panel(template[:1000] + "...", title="Template"))
@@ -383,9 +406,31 @@ def brains():
         "Core (Complete)": ["engineering", "design", "mba", "options_trading", "ceo"],
         "Business & Strategy": ["finance", "operations", "legal"],
         "Product & Design": ["product", "game_design", "content", "localization"],
-        "Growth & Revenue": ["marketing", "sales", "growth", "partnership", "customer_success"],
-        "Technical": ["data", "security", "cloud", "mobile", "qa", "ai", "automation", "analytics", "devrel"],
-        "Marketing Channels": ["branding", "email", "social_media", "video", "community"],
+        "Growth & Revenue": [
+            "marketing",
+            "sales",
+            "growth",
+            "partnership",
+            "customer_success",
+        ],
+        "Technical": [
+            "data",
+            "security",
+            "cloud",
+            "mobile",
+            "qa",
+            "ai",
+            "automation",
+            "analytics",
+            "devrel",
+        ],
+        "Marketing Channels": [
+            "branding",
+            "email",
+            "social_media",
+            "video",
+            "community",
+        ],
         "Business Operations": ["support", "investor", "pricing", "innovation"],
         "People": ["hr", "research"],
     }

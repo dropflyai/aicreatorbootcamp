@@ -13,6 +13,7 @@ import pytest
 # API key fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture()
 def mock_api_key(monkeypatch):
     """Provide a fake Anthropic API key and inject it into the environment."""
@@ -24,6 +25,7 @@ def mock_api_key(monkeypatch):
 # ---------------------------------------------------------------------------
 # Anthropic client fixture
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def mock_anthropic_client():
@@ -53,6 +55,7 @@ def mock_anthropic_client():
 # ---------------------------------------------------------------------------
 # Supabase fixture
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def mock_supabase():
@@ -91,6 +94,7 @@ def mock_supabase():
 # ---------------------------------------------------------------------------
 # Sample data fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture()
 def sample_task():
@@ -134,6 +138,7 @@ def sample_brain_content():
 # BrainLoader helpers
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture()
 def tmp_brain_dir(tmp_path):
     """Create a temporary brain directory structure with CLAUDE.md files.
@@ -145,7 +150,8 @@ def tmp_brain_dir(tmp_path):
 
     eng_dir = brains_root / "engineering_brain"
     eng_dir.mkdir()
-    (eng_dir / "CLAUDE.md").write_text(textwrap.dedent("""\
+    (eng_dir / "CLAUDE.md").write_text(
+        textwrap.dedent("""\
         # Engineering Brain
 
         ## Identity
@@ -156,11 +162,14 @@ def tmp_brain_dir(tmp_path):
 
         - Verify before asserting
         - Use automation when available
-    """), encoding="utf-8")
+    """),
+        encoding="utf-8",
+    )
 
     design_dir = brains_root / "design_brain"
     design_dir.mkdir()
-    (design_dir / "CLAUDE.md").write_text(textwrap.dedent("""\
+    (design_dir / "CLAUDE.md").write_text(
+        textwrap.dedent("""\
         # Design Brain
 
         ## Identity
@@ -171,7 +180,9 @@ def tmp_brain_dir(tmp_path):
 
         - Clarity beats clever
         - One primary action per screen
-    """), encoding="utf-8")
+    """),
+        encoding="utf-8",
+    )
 
     return brains_root
 

@@ -154,7 +154,9 @@ class BaseAgent(ABC):
         # Add agent-specific instructions
         agent_instructions = self._get_agent_instructions()
         if agent_instructions:
-            prompt = f"{prompt}\n\n## Agent-Specific Instructions\n\n{agent_instructions}"
+            prompt = (
+                f"{prompt}\n\n## Agent-Specific Instructions\n\n{agent_instructions}"
+            )
 
         if not additional_context:
             self._system_prompt = prompt
@@ -234,17 +236,21 @@ class BaseAgent(ABC):
                             max_tokens=4096,
                             system=system_prompt,
                             messages=messages,
-                            tools=self._tool_definitions if self._tool_definitions else None,
+                            tools=self._tool_definitions
+                            if self._tool_definitions
+                            else None,
                         )
                         break
                     except anthropic.APITimeoutError as e:
                         last_error = e
-                        wait = 2 ** attempt  # 1s, 2s, 4s
+                        wait = 2**attempt  # 1s, 2s, 4s
                         time.sleep(wait)
                 else:
                     raise last_error  # type: ignore[misc]
 
-                total_tokens += response.usage.input_tokens + response.usage.output_tokens
+                total_tokens += (
+                    response.usage.input_tokens + response.usage.output_tokens
+                )
 
                 # Check if we're done
                 if response.stop_reason == "end_turn":
@@ -268,7 +274,9 @@ class BaseAgent(ABC):
                         verification = protocol.verify(task)
                         if not verification.passed:
                             result.success = False
-                            result.error = f"Verification failed: {'; '.join(verification.errors)}"
+                            result.error = (
+                                f"Verification failed: {'; '.join(verification.errors)}"
+                            )
 
                     # Auto-log to Supabase
                     if self.auto_log and self._memory_client:

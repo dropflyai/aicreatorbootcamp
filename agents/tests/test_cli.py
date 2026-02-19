@@ -20,6 +20,7 @@ def runner():
 # Help
 # ---------------------------------------------------------------------------
 
+
 class TestHelp:
     """Tests for the CLI help output."""
 
@@ -36,6 +37,7 @@ class TestHelp:
 # brains command
 # ---------------------------------------------------------------------------
 
+
 class TestBrainsCommand:
     """Tests for ``px1000 brains``."""
 
@@ -51,6 +53,7 @@ class TestBrainsCommand:
 # ---------------------------------------------------------------------------
 # status command
 # ---------------------------------------------------------------------------
+
 
 class TestStatusCommand:
     """Tests for ``px1000 status``."""
@@ -74,6 +77,7 @@ class TestStatusCommand:
 # run command -- missing API key
 # ---------------------------------------------------------------------------
 
+
 class TestRunCommand:
     """Tests for ``px1000 run``."""
 
@@ -86,4 +90,8 @@ class TestRunCommand:
             env=env,
         )
         # Should either exit non-zero or print an error about the API key
-        assert result.exit_code != 0 or "api key" in result.output.lower() or "error" in result.output.lower()
+        assert (
+            result.exit_code != 0
+            or "api key" in result.output.lower()
+            or "error" in result.output.lower()
+        )

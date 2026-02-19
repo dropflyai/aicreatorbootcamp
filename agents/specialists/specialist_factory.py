@@ -75,10 +75,11 @@ class SpecialistFactory:
             )
 
         # Unknown brain type
-        available = ", ".join(list(cls.SPECIALISTS.keys()) + list(loader.BRAIN_PATHS.keys()))
+        available = ", ".join(
+            list(cls.SPECIALISTS.keys()) + list(loader.BRAIN_PATHS.keys())
+        )
         raise ValueError(
-            f"Unknown specialist type: {brain_type}. "
-            f"Available: {available}"
+            f"Unknown specialist type: {brain_type}. Available: {available}"
         )
 
     @classmethod
@@ -169,7 +170,9 @@ class SpecialistFactory:
         Returns:
             Description string.
         """
-        return cls.BRAIN_DESCRIPTIONS.get(brain_type, "Specialist brain (no description)")
+        return cls.BRAIN_DESCRIPTIONS.get(
+            brain_type, "Specialist brain (no description)"
+        )
 
     @classmethod
     def create_all(

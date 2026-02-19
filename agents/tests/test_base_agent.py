@@ -13,6 +13,7 @@ from agents.core.base_agent import AgentResponse, BaseAgent
 # Concrete subclass for testing (BaseAgent is abstract)
 # ---------------------------------------------------------------------------
 
+
 class _StubAgent(BaseAgent):
     """Minimal concrete subclass used in tests."""
 
@@ -27,6 +28,7 @@ class _StubAgent(BaseAgent):
 # Initialisation
 # ---------------------------------------------------------------------------
 
+
 class TestInit:
     """Tests for BaseAgent.__init__()."""
 
@@ -37,7 +39,9 @@ class TestInit:
                 with pytest.raises(ValueError, match="API key required"):
                     _StubAgent()
 
-    def test_init_with_env_var(self, mock_api_key, mock_anthropic_client, mock_supabase):
+    def test_init_with_env_var(
+        self, mock_api_key, mock_anthropic_client, mock_supabase
+    ):
         """When ANTHROPIC_API_KEY is set, the agent initialises successfully."""
         agent = _StubAgent(auto_log=False)
         assert agent.api_key == mock_api_key
@@ -52,6 +56,7 @@ class TestInit:
 # ---------------------------------------------------------------------------
 # Tool registration and execution
 # ---------------------------------------------------------------------------
+
 
 class TestToolRegistry:
     """Tests for register_tool / _execute_tool."""
@@ -91,6 +96,7 @@ class TestToolRegistry:
 # System prompt
 # ---------------------------------------------------------------------------
 
+
 class TestSystemPrompt:
     """Tests for BaseAgent.get_system_prompt()."""
 
@@ -123,6 +129,7 @@ class TestSystemPrompt:
 # ---------------------------------------------------------------------------
 # run()
 # ---------------------------------------------------------------------------
+
 
 class TestRun:
     """Tests for BaseAgent.run()."""

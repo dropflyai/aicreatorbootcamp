@@ -1,6 +1,5 @@
 """Tests for agents.core.brain_loader.BrainLoader."""
 
-
 import pytest
 
 from agents.core.brain_loader import BrainLoader
@@ -8,6 +7,7 @@ from agents.core.brain_loader import BrainLoader
 # ---------------------------------------------------------------------------
 # load_brain
 # ---------------------------------------------------------------------------
+
 
 class TestLoadBrain:
     """Tests for BrainLoader.load_brain()."""
@@ -24,7 +24,9 @@ class TestLoadBrain:
         with pytest.raises(ValueError, match="Unknown brain"):
             loader.load_brain("nonexistent_brain")
 
-    def test_load_brain_missing_file_raises_file_not_found(self, brain_loader_with_mock):
+    def test_load_brain_missing_file_raises_file_not_found(
+        self, brain_loader_with_mock
+    ):
         """If the brain directory exists in BRAIN_PATHS but CLAUDE.md is
         absent, FileNotFoundError is raised."""
         # Create an entry in BRAIN_PATHS that maps to a dir without CLAUDE.md
@@ -45,6 +47,7 @@ class TestLoadBrain:
 # ---------------------------------------------------------------------------
 # extract_identity / extract_rules
 # ---------------------------------------------------------------------------
+
 
 class TestExtractSections:
     """Tests for section extraction helpers."""
@@ -75,6 +78,7 @@ class TestExtractSections:
 # get_available_brains
 # ---------------------------------------------------------------------------
 
+
 class TestGetAvailableBrains:
     """Tests for BrainLoader.get_available_brains()."""
 
@@ -92,10 +96,13 @@ class TestGetAvailableBrains:
 # build_system_prompt
 # ---------------------------------------------------------------------------
 
+
 class TestBuildSystemPrompt:
     """Tests for BrainLoader.build_system_prompt()."""
 
-    def test_build_system_prompt_includes_identity_and_rules(self, brain_loader_with_mock):
+    def test_build_system_prompt_includes_identity_and_rules(
+        self, brain_loader_with_mock
+    ):
         prompt = brain_loader_with_mock.build_system_prompt("engineering")
         # Identity content
         assert "Principal-level" in prompt
@@ -104,7 +111,9 @@ class TestBuildSystemPrompt:
         # Brain header
         assert "ENGINEERING AGENT" in prompt
 
-    def test_build_system_prompt_includes_additional_context(self, brain_loader_with_mock):
+    def test_build_system_prompt_includes_additional_context(
+        self, brain_loader_with_mock
+    ):
         prompt = brain_loader_with_mock.build_system_prompt(
             "engineering", additional_context="Use Python 3.12"
         )
@@ -115,6 +124,7 @@ class TestBuildSystemPrompt:
 # ---------------------------------------------------------------------------
 # clear_cache
 # ---------------------------------------------------------------------------
+
 
 class TestClearCache:
     """Tests for BrainLoader.clear_cache()."""

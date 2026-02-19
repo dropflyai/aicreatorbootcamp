@@ -147,8 +147,13 @@ class QualityValidator:
             if len(identity_content) < 100:
                 warnings.append("Identity section is very brief")
                 score -= 5
-            if "specialist" not in identity_content.lower() and "expert" not in identity_content.lower():
-                suggestions.append("Consider explicitly stating the brain's specialist role")
+            if (
+                "specialist" not in identity_content.lower()
+                and "expert" not in identity_content.lower()
+            ):
+                suggestions.append(
+                    "Consider explicitly stating the brain's specialist role"
+                )
         else:
             errors.append("Identity section has no content")
             score -= 10
@@ -163,14 +168,19 @@ class QualityValidator:
             rules_content = rules_match.group(1)
             rule_count = rules_content.count("- ")
             if rule_count < 3:
-                warnings.append(f"Only {rule_count} absolute rules defined (recommend 5+)")
+                warnings.append(
+                    f"Only {rule_count} absolute rules defined (recommend 5+)"
+                )
                 score -= 5
         else:
             errors.append("Absolute Rules section has no content")
             score -= 10
 
         # Check COMMIT RULE
-        if "ASK the user" not in content and "ask before committing" not in content.lower():
+        if (
+            "ASK the user" not in content
+            and "ask before committing" not in content.lower()
+        ):
             warnings.append("COMMIT RULE should include user approval step")
             score -= 5
 
@@ -229,7 +239,11 @@ class QualityValidator:
 
         # Compare structure
         ref_dirs = {d.name for d in reference_dir.iterdir() if d.is_dir()}
-        brain_dirs = {d.name for d in brain_dir.iterdir() if d.is_dir()} if brain_dir.exists() else set()
+        brain_dirs = (
+            {d.name for d in brain_dir.iterdir() if d.is_dir()}
+            if brain_dir.exists()
+            else set()
+        )
 
         missing_dirs = ref_dirs - brain_dirs - {"Memory"}  # Memory is optional
         if missing_dirs:
@@ -241,13 +255,19 @@ class QualityValidator:
         brain_claude = brain_dir / "CLAUDE.md"
 
         if ref_claude.exists() and brain_claude.exists():
-            ref_sections = set(re.findall(r"^## (.+)$", ref_claude.read_text(), re.MULTILINE))
-            brain_sections = set(re.findall(r"^## (.+)$", brain_claude.read_text(), re.MULTILINE))
+            ref_sections = set(
+                re.findall(r"^## (.+)$", ref_claude.read_text(), re.MULTILINE)
+            )
+            brain_sections = set(
+                re.findall(r"^## (.+)$", brain_claude.read_text(), re.MULTILINE)
+            )
 
             missing_sections = ref_sections - brain_sections
             for section in missing_sections:
                 if section not in self.REQUIRED_SECTIONS:
-                    suggestions.append(f"Reference has '## {section}' - consider adding")
+                    suggestions.append(
+                        f"Reference has '## {section}' - consider adding"
+                    )
 
         # Score based on structural similarity
         score = 100.0

@@ -23,6 +23,7 @@ def decomposer():
 # is_simple_task
 # ---------------------------------------------------------------------------
 
+
 class TestIsSimpleTask:
     """Tests for TaskDecomposer.is_simple_task()."""
 
@@ -45,6 +46,7 @@ class TestIsSimpleTask:
 # get_primary_brain
 # ---------------------------------------------------------------------------
 
+
 class TestGetPrimaryBrain:
     """Tests for TaskDecomposer.get_primary_brain()."""
 
@@ -56,7 +58,9 @@ class TestGetPrimaryBrain:
 
     def test_get_primary_brain_default(self, decomposer):
         """Unrecognised tasks fall back to engineering."""
-        assert decomposer.get_primary_brain("do something unknown xyzzy") == "engineering"
+        assert (
+            decomposer.get_primary_brain("do something unknown xyzzy") == "engineering"
+        )
 
     def test_get_primary_brain_marketing(self, decomposer):
         assert decomposer.get_primary_brain("Run a marketing campaign") == "marketing"
@@ -68,6 +72,7 @@ class TestGetPrimaryBrain:
 # ---------------------------------------------------------------------------
 # decompose
 # ---------------------------------------------------------------------------
+
 
 class TestDecompose:
     """Tests for TaskDecomposer.decompose()."""
@@ -82,28 +87,30 @@ class TestDecompose:
 
     def test_decompose_with_mock_api(self, decomposer):
         """Successful JSON parsing path."""
-        api_json = json.dumps({
-            "subtasks": [
-                {
-                    "id": "task_1",
-                    "description": "Design the database schema",
-                    "required_brain": "engineering",
-                    "dependencies": [],
-                    "priority": 1,
-                    "estimated_complexity": "medium",
-                },
-                {
-                    "id": "task_2",
-                    "description": "Design the UI wireframe",
-                    "required_brain": "design",
-                    "dependencies": ["task_1"],
-                    "priority": 2,
-                    "estimated_complexity": "high",
-                },
-            ],
-            "execution_order": ["task_1", "task_2"],
-            "reasoning": "DB schema first, then UI.",
-        })
+        api_json = json.dumps(
+            {
+                "subtasks": [
+                    {
+                        "id": "task_1",
+                        "description": "Design the database schema",
+                        "required_brain": "engineering",
+                        "dependencies": [],
+                        "priority": 1,
+                        "estimated_complexity": "medium",
+                    },
+                    {
+                        "id": "task_2",
+                        "description": "Design the UI wireframe",
+                        "required_brain": "design",
+                        "dependencies": ["task_1"],
+                        "priority": 2,
+                        "estimated_complexity": "high",
+                    },
+                ],
+                "execution_order": ["task_1", "task_2"],
+                "reasoning": "DB schema first, then UI.",
+            }
+        )
 
         decomposer.client.messages.create.return_value = self._make_api_response(
             f"```json\n{api_json}\n```"
@@ -131,20 +138,22 @@ class TestDecompose:
 
     def test_decompose_with_context(self, decomposer):
         """The context argument is forwarded into the prompt sent to the API."""
-        api_json = json.dumps({
-            "subtasks": [
-                {
-                    "id": "task_1",
-                    "description": "Implement auth",
-                    "required_brain": "engineering",
-                    "dependencies": [],
-                    "priority": 1,
-                    "estimated_complexity": "low",
-                },
-            ],
-            "execution_order": ["task_1"],
-            "reasoning": "Simple task.",
-        })
+        api_json = json.dumps(
+            {
+                "subtasks": [
+                    {
+                        "id": "task_1",
+                        "description": "Implement auth",
+                        "required_brain": "engineering",
+                        "dependencies": [],
+                        "priority": 1,
+                        "estimated_complexity": "low",
+                    },
+                ],
+                "execution_order": ["task_1"],
+                "reasoning": "Simple task.",
+            }
+        )
 
         decomposer.client.messages.create.return_value = self._make_api_response(
             f"```json\n{api_json}\n```"

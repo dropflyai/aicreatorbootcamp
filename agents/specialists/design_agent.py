@@ -1,6 +1,5 @@
 """Design Agent - UI/UX and visual design specialist."""
 
-
 from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
 
@@ -267,7 +266,7 @@ Output format:
 {purpose}
 
 ## Variants
-{chr(10).join(f'- {v}' for v in variants)}
+{chr(10).join(f"- {v}" for v in variants)}
 
 ## States
 - **Default**: Normal interactive state
@@ -466,10 +465,18 @@ Output format:
                 memory_client=self._memory_client,
             )
 
-            full_prompt = f"Design context: {context}\n\nQuestion: {question}" if context else question
+            full_prompt = (
+                f"Design context: {context}\n\nQuestion: {question}"
+                if context
+                else question
+            )
             result = eng_agent.run(full_prompt)
 
-            return result.content if result.success else f"Engineering brain error: {result.error}"
+            return (
+                result.content
+                if result.success
+                else f"Engineering brain error: {result.error}"
+            )
 
         except Exception as e:
             return f"Failed to call engineering brain: {str(e)}"
@@ -530,4 +537,6 @@ Output format:
             # Clear cached system prompt
             self._system_prompt = None
         else:
-            raise ValueError(f"Invalid design mode: {mode}. Use: {list(self.DESIGN_MODES.keys())}")
+            raise ValueError(
+                f"Invalid design mode: {mode}. Use: {list(self.DESIGN_MODES.keys())}"
+            )

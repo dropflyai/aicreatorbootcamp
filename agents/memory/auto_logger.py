@@ -276,7 +276,9 @@ class AgentLoggerMixin:
                 return logger.log_failure(
                     task_summary=task[:200],
                     problem=error or "Unknown error",
-                    lessons_learned=str(result)[:500] if result else "No additional info",
+                    lessons_learned=str(result)[:500]
+                    if result
+                    else "No additional info",
                     tags=[self.BRAIN_NAME, "agent-run", "error"],
                 )
 

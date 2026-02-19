@@ -13,6 +13,7 @@ from pathlib import Path
 @dataclass
 class SandboxResult:
     """Result from a sandboxed agent execution."""
+
     output: str
     exit_code: int
     success: bool
@@ -62,19 +63,24 @@ class SandboxRunner:
             # Check if image already exists
             result = subprocess.run(
                 ["docker", "image", "inspect", self.image_name],
-                capture_output=True, text=True,
+                capture_output=True,
+                text=True,
             )
             if result.returncode == 0:
                 return True
 
         result = subprocess.run(
             [
-                "docker", "build",
-                "-t", self.image_name,
-                "-f", str(self.sandbox_dir / "Dockerfile"),
+                "docker",
+                "build",
+                "-t",
+                self.image_name,
+                "-f",
+                str(self.sandbox_dir / "Dockerfile"),
                 str(self.agents_dir),
             ],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
 
         return result.returncode == 0
@@ -112,13 +118,18 @@ class SandboxRunner:
 
         # Build docker run command
         cmd = [
-            "docker", "run",
+            "docker",
+            "run",
             "--rm",
-            "--memory", memory_limit,
-            "--cpus", cpu_limit,
-            "--security-opt", "no-new-privileges:true",
+            "--memory",
+            memory_limit,
+            "--cpus",
+            cpu_limit,
+            "--security-opt",
+            "no-new-privileges:true",
             "--read-only",
-            "--tmpfs", "/tmp:size=100M",
+            "--tmpfs",
+            "/tmp:size=100M",
         ]
 
         # Network isolation
@@ -128,9 +139,12 @@ class SandboxRunner:
         # Mount brains as read-only
         brain_dir = self.project_root / f"{brain_type}_brain"
         if brain_dir.exists():
-            cmd.extend([
-                "-v", f"{brain_dir}:/brains/{brain_type}_brain:ro",
-            ])
+            cmd.extend(
+                [
+                    "-v",
+                    f"{brain_dir}:/brains/{brain_type}_brain:ro",
+                ]
+            )
 
         # Environment variables
         api_key = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -140,10 +154,16 @@ class SandboxRunner:
         cmd.extend(["-e", "BRAINS_ROOT=/brains"])
 
         # Image and command
-        cmd.extend([
-            self.image_name,
-            "cli.main", "run", brain_type, task, "--direct",
-        ])
+        cmd.extend(
+            [
+                self.image_name,
+                "cli.main",
+                "run",
+                brain_type,
+                task,
+                "--direct",
+            ]
+        )
 
         try:
             result = subprocess.run(
@@ -180,9 +200,11 @@ class SandboxRunner:
         """Remove sandbox image and volumes."""
         subprocess.run(
             ["docker", "rmi", self.image_name],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )
         subprocess.run(
             ["docker", "volume", "rm", "sandbox-work"],
-            capture_output=True, text=True,
+            capture_output=True,
+            text=True,
         )

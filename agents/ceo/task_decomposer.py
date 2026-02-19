@@ -297,22 +297,35 @@ Now analyze the following task and provide decomposition:
         # Keyword matching for quick routing (ordered by specificity)
 
         # Technical brains
-        if any(kw in task_lower for kw in [" ai ", " ai,", "llm", "prompt", "ml ", "machine learning"]):
+        if any(
+            kw in task_lower
+            for kw in [" ai ", " ai,", "llm", "prompt", "ml ", "machine learning"]
+        ):
             return "ai"
 
-        if any(kw in task_lower for kw in ["security", "pentest", "vulnerability", "audit"]):
+        if any(
+            kw in task_lower for kw in ["security", "pentest", "vulnerability", "audit"]
+        ):
             return "security"
 
-        if any(kw in task_lower for kw in ["cloud", "aws", "gcp", "azure", "kubernetes", "docker"]):
+        if any(
+            kw in task_lower
+            for kw in ["cloud", "aws", "gcp", "azure", "kubernetes", "docker"]
+        ):
             return "cloud"
 
-        if any(kw in task_lower for kw in ["mobile", "ios", "android", "react native", "flutter"]):
+        if any(
+            kw in task_lower
+            for kw in ["mobile", "ios", "android", "react native", "flutter"]
+        ):
             return "mobile"
 
         if any(kw in task_lower for kw in ["qa", "test", "testing", "quality"]):
             return "qa"
 
-        if any(kw in task_lower for kw in ["data", "analytics", "pipeline", "warehouse"]):
+        if any(
+            kw in task_lower for kw in ["data", "analytics", "pipeline", "warehouse"]
+        ):
             return "data"
 
         if any(kw in task_lower for kw in ["automation", "workflow", "zapier", "n8n"]):
@@ -321,8 +334,15 @@ Now analyze the following task and provide decomposition:
         if any(
             kw in task_lower
             for kw in [
-                "code", "api", "database", "deploy", "bug", "backend",
-                "frontend", "server", "endpoint",
+                "code",
+                "api",
+                "database",
+                "deploy",
+                "bug",
+                "backend",
+                "frontend",
+                "server",
+                "endpoint",
             ]
         ):
             return "engineering"
@@ -331,8 +351,15 @@ Now analyze the following task and provide decomposition:
         if any(
             kw in task_lower
             for kw in [
-                "design", "ui", "ux", "layout", "color", "font",
-                "wireframe", "mockup", "component",
+                "design",
+                "ui",
+                "ux",
+                "layout",
+                "color",
+                "font",
+                "wireframe",
+                "mockup",
+                "component",
             ]
         ):
             return "design"
@@ -340,14 +367,20 @@ Now analyze the following task and provide decomposition:
         if any(kw in task_lower for kw in ["brand", "branding", "logo", "identity"]):
             return "branding"
 
-        if any(kw in task_lower for kw in ["game", "gameplay", "level design", "mechanics"]):
+        if any(
+            kw in task_lower for kw in ["game", "gameplay", "level design", "mechanics"]
+        ):
             return "game_design"
 
         # Growth & Revenue brains
-        if any(kw in task_lower for kw in ["marketing", "campaign", "advertising", "ads"]):
+        if any(
+            kw in task_lower for kw in ["marketing", "campaign", "advertising", "ads"]
+        ):
             return "marketing"
 
-        if any(kw in task_lower for kw in ["sales", "selling", "close", "deal", "pipeline"]):
+        if any(
+            kw in task_lower for kw in ["sales", "selling", "close", "deal", "pipeline"]
+        ):
             return "sales"
 
         if any(kw in task_lower for kw in ["growth", "viral", "referral", "plg"]):
@@ -363,7 +396,10 @@ Now analyze the following task and provide decomposition:
         if any(kw in task_lower for kw in ["email", "newsletter", "drip"]):
             return "email"
 
-        if any(kw in task_lower for kw in ["social media", "twitter", "instagram", "linkedin", "tiktok"]):
+        if any(
+            kw in task_lower
+            for kw in ["social media", "twitter", "instagram", "linkedin", "tiktok"]
+        ):
             return "social_media"
 
         if any(kw in task_lower for kw in ["video", "youtube", "production"]):
@@ -372,11 +408,16 @@ Now analyze the following task and provide decomposition:
         if any(kw in task_lower for kw in ["community", "discord", "slack", "forum"]):
             return "community"
 
-        if any(kw in task_lower for kw in ["content", "copywriting", "blog", "article", "seo"]):
+        if any(
+            kw in task_lower
+            for kw in ["content", "copywriting", "blog", "article", "seo"]
+        ):
             return "content"
 
         # Business brains
-        if any(kw in task_lower for kw in ["finance", "accounting", "budget", "financial"]):
+        if any(
+            kw in task_lower for kw in ["finance", "accounting", "budget", "financial"]
+        ):
             return "finance"
 
         if any(kw in task_lower for kw in ["legal", "contract", "compliance", "ip"]):
@@ -385,7 +426,9 @@ Now analyze the following task and provide decomposition:
         if any(kw in task_lower for kw in ["operations", "supply chain", "logistics"]):
             return "operations"
 
-        if any(kw in task_lower for kw in ["investor", "fundraise", "pitch deck", "vc"]):
+        if any(
+            kw in task_lower for kw in ["investor", "fundraise", "pitch deck", "vc"]
+        ):
             return "investor"
 
         if any(kw in task_lower for kw in ["pricing", "monetization", "subscription"]):
@@ -394,17 +437,26 @@ Now analyze the following task and provide decomposition:
         if any(kw in task_lower for kw in ["support", "help desk", "ticket"]):
             return "support"
 
-        if any(kw in task_lower for kw in ["hr", "hiring", "recruit", "culture", "team"]):
+        if any(
+            kw in task_lower for kw in ["hr", "hiring", "recruit", "culture", "team"]
+        ):
             return "hr"
 
-        if any(kw in task_lower for kw in ["research", "competitor", "market research"]):
+        if any(
+            kw in task_lower for kw in ["research", "competitor", "market research"]
+        ):
             return "research"
 
         # Product
         if any(
             kw in task_lower
             for kw in [
-                "product", "roadmap", "feature", "prd", "requirements", "priorit",
+                "product",
+                "roadmap",
+                "feature",
+                "prd",
+                "requirements",
+                "priorit",
             ]
         ):
             return "product"
@@ -413,7 +465,11 @@ Now analyze the following task and provide decomposition:
         if any(
             kw in task_lower
             for kw in [
-                "trade", "option", "stock", "portfolio", "market analysis",
+                "trade",
+                "option",
+                "stock",
+                "portfolio",
+                "market analysis",
             ]
         ):
             return "options_trading"
@@ -422,7 +478,11 @@ Now analyze the following task and provide decomposition:
         if any(
             kw in task_lower
             for kw in [
-                "business", "strategy", "market", "revenue", "competitor",
+                "business",
+                "strategy",
+                "market",
+                "revenue",
+                "competitor",
             ]
         ):
             return "mba"

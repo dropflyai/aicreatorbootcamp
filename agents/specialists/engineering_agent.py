@@ -331,10 +331,18 @@ Output quality:
                 memory_client=self._memory_client,
             )
 
-            full_prompt = f"Engineering context: {context}\n\nQuestion: {question}" if context else question
+            full_prompt = (
+                f"Engineering context: {context}\n\nQuestion: {question}"
+                if context
+                else question
+            )
             result = design_agent.run(full_prompt)
 
-            return result.content if result.success else f"Design brain error: {result.error}"
+            return (
+                result.content
+                if result.success
+                else f"Design brain error: {result.error}"
+            )
 
         except Exception as e:
             return f"Failed to call design brain: {str(e)}"

@@ -1162,8 +1162,6 @@ class BrainSelector:
             kw_str = ", ".join(keywords[:5])
             if len(keywords) > 5:
                 kw_str += f", ... (+{len(keywords) - 5} more)"
-            explanation_parts.append(
-                f"- {brain_type.value}: matched [{kw_str}]"
-            )
+            explanation_parts.append(f"- {brain_type.value}: matched [{kw_str}]")
 
         return "Keyword matches:\n" + "\n".join(explanation_parts)

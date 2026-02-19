@@ -14,6 +14,7 @@ def selector():
 # select_brain (single)
 # ---------------------------------------------------------------------------
 
+
 class TestSelectBrain:
     """Tests for BrainSelector.select_brain()."""
 
@@ -31,13 +32,16 @@ class TestSelectBrain:
 
     def test_select_brain_defaults_to_engineering(self, selector):
         """When no keywords match, the selector falls back to ENGINEERING."""
-        result = selector.select_brain("do something completely unrelated to everything xyzzy")
+        result = selector.select_brain(
+            "do something completely unrelated to everything xyzzy"
+        )
         assert result == BrainType.ENGINEERING
 
 
 # ---------------------------------------------------------------------------
 # select_brains (multiple)
 # ---------------------------------------------------------------------------
+
 
 class TestSelectBrains:
     """Tests for BrainSelector.select_brains()."""
@@ -63,6 +67,7 @@ class TestSelectBrains:
 # Capability completeness
 # ---------------------------------------------------------------------------
 
+
 class TestCapabilities:
     """Tests for the BRAIN_CAPABILITIES registry."""
 
@@ -82,6 +87,7 @@ class TestCapabilities:
 # can_delegate
 # ---------------------------------------------------------------------------
 
+
 class TestCanDelegate:
     """Tests for BrainSelector.can_delegate()."""
 
@@ -97,6 +103,7 @@ class TestCanDelegate:
 # ---------------------------------------------------------------------------
 # get_routing_explanation
 # ---------------------------------------------------------------------------
+
 
 class TestRoutingExplanation:
     """Tests for BrainSelector.get_routing_explanation()."""
@@ -115,6 +122,7 @@ class TestRoutingExplanation:
 # keyword index
 # ---------------------------------------------------------------------------
 
+
 class TestKeywordIndex:
     """Tests for the internal keyword index."""
 
@@ -122,8 +130,7 @@ class TestKeywordIndex:
         """The inverted keyword index should contain entries for every keyword
         defined across all capabilities."""
         total_keywords = sum(
-            len(cap.keywords)
-            for cap in selector.BRAIN_CAPABILITIES.values()
+            len(cap.keywords) for cap in selector.BRAIN_CAPABILITIES.values()
         )
         # The index may be smaller because some keywords are shared across
         # brains, but it must be at least 1 and no larger than the total.

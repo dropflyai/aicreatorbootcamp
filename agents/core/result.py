@@ -12,6 +12,7 @@ E = TypeVar("E")
 @dataclass(frozen=True, slots=True)
 class Ok(Generic[T]):
     """Successful result."""
+
     value: T
 
     @property
@@ -32,6 +33,7 @@ class Ok(Generic[T]):
 @dataclass(frozen=True, slots=True)
 class Err(Generic[E]):
     """Error result."""
+
     error: E
 
     @property

@@ -1,6 +1,5 @@
 """Tests for agents.specialists.specialist_factory.SpecialistFactory."""
 
-
 import pytest
 
 from agents.core.base_agent import BaseAgent
@@ -13,6 +12,7 @@ from agents.specialists.specialist_factory import SpecialistFactory
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture(autouse=True)
 def _mock_externals(mock_api_key, mock_anthropic_client):
     """Ensure all tests have mocked API key and Anthropic client."""
@@ -22,6 +22,7 @@ def _mock_externals(mock_api_key, mock_anthropic_client):
 # ---------------------------------------------------------------------------
 # create() -- known specialists
 # ---------------------------------------------------------------------------
+
 
 class TestCreateKnown:
     """Tests for SpecialistFactory.create() with registered specialist types."""
@@ -42,6 +43,7 @@ class TestCreateKnown:
 # ---------------------------------------------------------------------------
 # create() -- unknown / generic fallback
 # ---------------------------------------------------------------------------
+
 
 class TestCreateGeneric:
     """Tests for SpecialistFactory.create() with generic / unknown brain types."""
@@ -65,6 +67,7 @@ class TestCreateGeneric:
 # get_available
 # ---------------------------------------------------------------------------
 
+
 class TestGetAvailable:
     """Tests for SpecialistFactory.get_available()."""
 
@@ -84,6 +87,7 @@ class TestGetAvailable:
 # ---------------------------------------------------------------------------
 # register
 # ---------------------------------------------------------------------------
+
 
 class TestRegister:
     """Tests for SpecialistFactory.register()."""

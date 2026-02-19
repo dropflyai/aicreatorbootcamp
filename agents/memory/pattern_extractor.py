@@ -112,7 +112,11 @@ class PatternExtractor:
         text = text.lower()
 
         # Remove specific identifiers (UUIDs, numbers, etc.)
-        text = re.sub(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", "[id]", text)
+        text = re.sub(
+            r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+            "[id]",
+            text,
+        )
         text = re.sub(r"\b\d+\b", "[num]", text)
 
         # Remove project-specific names (quoted strings)
@@ -145,25 +149,21 @@ class PatternExtractor:
         for exp in experiences:
             all_tags.extend(exp.get("tags", []))
         common_tags = [
-            tag for tag, count in Counter(all_tags).items()
+            tag
+            for tag, count in Counter(all_tags).items()
             if count >= len(experiences) // 2
         ]
 
         # Extract common solutions
         solutions = [
-            exp.get("solution", "")
-            for exp in experiences
-            if exp.get("solution")
+            exp.get("solution", "") for exp in experiences if exp.get("solution")
         ]
 
         # Get most representative solution
         representative_solution = max(solutions, key=len) if solutions else ""
 
         # Get example usages (task summaries)
-        example_usages = [
-            exp.get("task_summary", "")
-            for exp in experiences[:3]
-        ]
+        example_usages = [exp.get("task_summary", "") for exp in experiences[:3]]
 
         return {
             "pattern_name": self._generate_pattern_name(group_key),
@@ -332,9 +332,7 @@ class PatternExtractor:
 
         # Extract lessons
         lessons = [
-            f.get("lessons_learned", "")
-            for f in failures
-            if f.get("lessons_learned")
+            f.get("lessons_learned", "") for f in failures if f.get("lessons_learned")
         ]
 
         return {
@@ -374,15 +372,18 @@ class PatternExtractor:
 
         for key in all_keys:
             brains_with_pattern = [
-                bt for bt, patterns in brain_patterns.items()
+                bt
+                for bt, patterns in brain_patterns.items()
                 if any(p["pattern_name"] == key for p in patterns)
             ]
 
             if len(brains_with_pattern) > 1:
-                cross_patterns.append({
-                    "pattern": key,
-                    "brains": brains_with_pattern,
-                })
+                cross_patterns.append(
+                    {
+                        "pattern": key,
+                        "brains": brains_with_pattern,
+                    }
+                )
 
         return {
             "brain_patterns": {

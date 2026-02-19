@@ -15,6 +15,7 @@ from agents.core.base_agent import AgentResponse
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _make_mock_specialist(content: str = "specialist result", success: bool = True):
     """Return a mock specialist agent whose ``run()`` returns a canned response."""
     mock_agent = MagicMock()
@@ -30,6 +31,7 @@ def _make_mock_specialist(content: str = "specialist result", success: bool = Tr
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture()
 def ceo_agent(mock_api_key, mock_anthropic_client, mock_supabase):
     """Fully mocked CEOAgent."""
@@ -43,6 +45,7 @@ def ceo_agent(mock_api_key, mock_anthropic_client, mock_supabase):
 # ---------------------------------------------------------------------------
 # orchestrate -- simple task path
 # ---------------------------------------------------------------------------
+
 
 class TestOrchestrateSimple:
     """Tests for the simple-task (skip decomposition) branch."""
@@ -62,6 +65,7 @@ class TestOrchestrateSimple:
 # ---------------------------------------------------------------------------
 # orchestrate -- complex task path
 # ---------------------------------------------------------------------------
+
 
 class TestOrchestrateComplex:
     """Tests for the decompose + delegate branch."""
@@ -114,6 +118,7 @@ class TestOrchestrateComplex:
 # _synthesize
 # ---------------------------------------------------------------------------
 
+
 class TestSynthesize:
     """Tests for CEOAgent._synthesize()."""
 
@@ -147,6 +152,7 @@ class TestSynthesize:
 # _delegate_to_brain
 # ---------------------------------------------------------------------------
 
+
 class TestDelegateToBrain:
     """Tests for CEOAgent._delegate_to_brain()."""
 
@@ -169,6 +175,7 @@ class TestDelegateToBrain:
 # ---------------------------------------------------------------------------
 # run (override)
 # ---------------------------------------------------------------------------
+
 
 class TestRunOverride:
     """Tests for CEOAgent.run() which delegates to orchestrate."""

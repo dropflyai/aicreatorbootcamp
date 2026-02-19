@@ -111,7 +111,13 @@ You have tools to:
                 "properties": {
                     "brain_type": {
                         "type": "string",
-                        "enum": ["engineering", "design", "mba", "options_trading", "product"],
+                        "enum": [
+                            "engineering",
+                            "design",
+                            "mba",
+                            "options_trading",
+                            "product",
+                        ],
                         "description": "The specialist brain to delegate to",
                     },
                     "task": {
@@ -136,7 +142,13 @@ You have tools to:
                 "properties": {
                     "brain_type": {
                         "type": "string",
-                        "enum": ["engineering", "design", "mba", "options_trading", "product"],
+                        "enum": [
+                            "engineering",
+                            "design",
+                            "mba",
+                            "options_trading",
+                            "product",
+                        ],
                         "description": "The brain to get capabilities for",
                     },
                 },
@@ -193,7 +205,9 @@ You have tools to:
                         "parent_agent": "ceo",
                         "child_agent": brain_type,
                         "task_description": task,
-                        "result_summary": result.content[:500] if result.content else None,
+                        "result_summary": result.content[:500]
+                        if result.content
+                        else None,
                         "success": result.success,
                     }
                 ).execute()
@@ -266,7 +280,9 @@ You have tools to:
                 {
                     "task_input": task,
                     "decomposed_tasks": [st.model_dump() for st in decomposed.subtasks],
-                    "delegated_to": list({st.required_brain for st in decomposed.subtasks}),
+                    "delegated_to": list(
+                        {st.required_brain for st in decomposed.subtasks}
+                    ),
                     "routing_reasoning": decomposed.reasoning,
                 }
             ).execute()
@@ -299,7 +315,9 @@ You have tools to:
                     for dep in subtask.dependencies
                     if dep in completed
                 )
-                subtask_context = f"{subtask_context}\n\n## Previous Results\n{dep_results}"
+                subtask_context = (
+                    f"{subtask_context}\n\n## Previous Results\n{dep_results}"
+                )
 
             # Execute subtask
             response = self._delegate_to_brain(
@@ -318,9 +336,7 @@ You have tools to:
         # Synthesize results
         result.brains_used = list(set(result.brains_used))
         result.final_synthesis = self._synthesize(task, completed)
-        result.success = all(
-            r.success for r in result.subtask_results.values()
-        )
+        result.success = all(r.success for r in result.subtask_results.values())
 
         # Update delegation log
         if self._memory_client:
@@ -359,7 +375,9 @@ Subtask results:
         for task_id, result in subtask_results.items():
             synthesis_prompt += f"\n--- {task_id} ---\n{result}\n"
 
-        synthesis_prompt += "\n\nProvide a unified, coherent response that addresses the original task."
+        synthesis_prompt += (
+            "\n\nProvide a unified, coherent response that addresses the original task."
+        )
 
         response = self.client.messages.create(
             model=self.model,

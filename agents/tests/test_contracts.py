@@ -11,6 +11,7 @@ from unittest.mock import MagicMock, patch
 # Anthropic API contract
 # ---------------------------------------------------------------------------
 
+
 class TestAnthropicAPIContract:
     """Verify the interface shape we expect from the Anthropic Python SDK."""
 
@@ -36,7 +37,9 @@ class TestAnthropicAPIContract:
             max_tokens=4096,
             system="You are an assistant.",
             messages=[{"role": "user", "content": "Hello"}],
-            tools=[{"name": "read_file", "description": "Read a file", "input_schema": {}}],
+            tools=[
+                {"name": "read_file", "description": "Read a file", "input_schema": {}}
+            ],
         )
 
         mock_client.messages.create.assert_called_once_with(
@@ -44,7 +47,9 @@ class TestAnthropicAPIContract:
             max_tokens=4096,
             system="You are an assistant.",
             messages=[{"role": "user", "content": "Hello"}],
-            tools=[{"name": "read_file", "description": "Read a file", "input_schema": {}}],
+            tools=[
+                {"name": "read_file", "description": "Read a file", "input_schema": {}}
+            ],
         )
 
     def test_response_has_content_stop_reason_usage(self):
@@ -92,7 +97,9 @@ class TestAnthropicAPIContract:
         assert end_turn_response.stop_reason == "end_turn"
         assert tool_use_response.stop_reason == "tool_use"
 
-    def test_base_agent_run_uses_correct_api_shape(self, mock_api_key, mock_anthropic_client):
+    def test_base_agent_run_uses_correct_api_shape(
+        self, mock_api_key, mock_anthropic_client
+    ):
         """Integration-level contract: ``BaseAgent.run()`` calls
         ``messages.create`` with the kwargs our code assembles."""
         from agents.core.base_agent import BaseAgent
@@ -121,6 +128,7 @@ class TestAnthropicAPIContract:
 # ---------------------------------------------------------------------------
 # Supabase client contract
 # ---------------------------------------------------------------------------
+
 
 class TestSupabaseClientContract:
     """Verify the interface shape we expect from the Supabase Python client."""
@@ -178,9 +186,7 @@ class TestSupabaseClientContract:
 
         from agents.core.memory_client import SupabaseMemoryClient
 
-        client = SupabaseMemoryClient(
-            url="https://x.supabase.co", key="test-key"
-        )
+        client = SupabaseMemoryClient(url="https://x.supabase.co", key="test-key")
         runs = client.get_agent_runs(agent_type="engineering", limit=5)
         assert isinstance(runs, list)
 
@@ -188,6 +194,7 @@ class TestSupabaseClientContract:
 # ---------------------------------------------------------------------------
 # Pydantic model contracts
 # ---------------------------------------------------------------------------
+
 
 class TestPydanticModelContracts:
     """Verify Pydantic models accept their documented fields and serialize."""

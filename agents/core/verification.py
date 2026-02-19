@@ -14,15 +14,17 @@ from pathlib import Path
 
 class VerificationLevel(Enum):
     """Verification levels based on change scope."""
-    FULL = "full"           # All three layers required
-    STANDARD = "standard"   # Tests + evidence required
-    MINIMAL = "minimal"     # Tests only
-    SKIP = "skip"           # Trivial changes (docs, comments)
+
+    FULL = "full"  # All three layers required
+    STANDARD = "standard"  # Tests + evidence required
+    MINIMAL = "minimal"  # Tests only
+    SKIP = "skip"  # Trivial changes (docs, comments)
 
 
 @dataclass
 class VerificationResult:
     """Result of a verification check."""
+
     passed: bool
     level: VerificationLevel
     test_passed: bool = False
@@ -48,11 +50,23 @@ class VerificationProtocol:
     def determine_level(self, change_description: str) -> VerificationLevel:
         """Determine verification level from change description."""
         trivial_indicators = ["docs", "comment", "readme", "typo", "formatting"]
-        if any(indicator in change_description.lower() for indicator in trivial_indicators):
+        if any(
+            indicator in change_description.lower() for indicator in trivial_indicators
+        ):
             return VerificationLevel.MINIMAL
 
-        high_risk_indicators = ["migration", "security", "auth", "deploy", "database", "schema"]
-        if any(indicator in change_description.lower() for indicator in high_risk_indicators):
+        high_risk_indicators = [
+            "migration",
+            "security",
+            "auth",
+            "deploy",
+            "database",
+            "schema",
+        ]
+        if any(
+            indicator in change_description.lower()
+            for indicator in high_risk_indicators
+        ):
             return VerificationLevel.FULL
 
         return VerificationLevel.STANDARD
@@ -67,7 +81,9 @@ class VerificationProtocol:
             result = subprocess.run(
                 ["python", "-m", "pytest", "tests/", "-v", "--tb=short"],
                 cwd=str(self.agents_dir),
-                capture_output=True, text=True, timeout=120
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             if result.returncode == 0:
                 details.append("pytest: PASSED")
@@ -82,7 +98,9 @@ class VerificationProtocol:
             result = subprocess.run(
                 ["ruff", "check", "."],
                 cwd=str(self.agents_dir),
-                capture_output=True, text=True, timeout=30
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             if result.returncode == 0:
                 details.append("ruff: PASSED")
@@ -97,7 +115,9 @@ class VerificationProtocol:
             result = subprocess.run(
                 ["mypy", "."],
                 cwd=str(self.agents_dir),
-                capture_output=True, text=True, timeout=60
+                capture_output=True,
+                text=True,
+                timeout=60,
             )
             if result.returncode == 0:
                 details.append("mypy: PASSED")
@@ -109,7 +129,9 @@ class VerificationProtocol:
 
         return all_passed, details
 
-    def check_evidence(self, evidence_dir: Path | None = None) -> tuple[bool, list[str]]:
+    def check_evidence(
+        self, evidence_dir: Path | None = None
+    ) -> tuple[bool, list[str]]:
         """Layer 2: Check evidence artifacts exist."""
         details = []
 
@@ -217,13 +239,12 @@ class TripleVerificationGate:
         result = self.protocol.verify(change_description)
 
         if strict and not result.passed:
-            raise VerificationError(
-                f"Verification failed: {'; '.join(result.errors)}"
-            )
+            raise VerificationError(f"Verification failed: {'; '.join(result.errors)}")
 
         return result
 
 
 class VerificationError(Exception):
     """Raised when verification gate fails in strict mode."""
+
     pass

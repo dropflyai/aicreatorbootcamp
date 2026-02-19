@@ -18,6 +18,7 @@ from agents.core.memory_client import (
 # Pydantic model validation
 # ---------------------------------------------------------------------------
 
+
 class TestModels:
     """Tests for the Pydantic data models."""
 
@@ -69,6 +70,7 @@ class TestModels:
 # SupabaseMemoryClient initialisation
 # ---------------------------------------------------------------------------
 
+
 class TestInit:
     """Tests for SupabaseMemoryClient.__init__()."""
 
@@ -91,6 +93,7 @@ class TestInit:
 # ---------------------------------------------------------------------------
 # Logging operations
 # ---------------------------------------------------------------------------
+
 
 class TestLogging:
     """Tests for log_agent_run and log_experience."""
@@ -131,6 +134,7 @@ class TestLogging:
 # ---------------------------------------------------------------------------
 # Search operations
 # ---------------------------------------------------------------------------
+
 
 class TestSearch:
     """Tests for search_experiences."""
