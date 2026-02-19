@@ -19,6 +19,33 @@ jobs:
       - run: cd agents && ruff check .
       - run: cd agents && ruff format --check .
 
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install bandit
+      - run: cd agents && bandit -r core/ ceo/ specialists/ cli/ memory/ -f json -o bandit-report.json || true
+      - run: cd agents && bandit -r core/ ceo/ specialists/ cli/ memory/ -ll
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bandit-report
+          path: agents/bandit-report.json
+
+  complexity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install radon
+      - run: cd agents && radon cc core/ ceo/ specialists/ -a -nc
+      - run: cd agents && radon mi core/ ceo/ specialists/ -nc
+
   type-check:
     runs-on: ubuntu-latest
     steps:
@@ -45,7 +72,7 @@ jobs:
           path: ~/.cache/pip
           key: pip-${{ matrix.python-version }}-${{ hashFiles('agents/pyproject.toml') }}
       - run: cd agents && pip install -e ".[dev]"
-      - run: cd agents && pytest tests/ -v --cov=. --cov-report=xml
+      - run: cd agents && pytest tests/ -v --cov=. --cov-report=xml --cov-fail-under=60
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -54,7 +81,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: [lint, type-check, test]
+    needs: [lint, type-check, test, security, complexity]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -62,3 +89,19 @@ jobs:
           python-version: '3.11'
       - run: pip install build
       - run: cd agents && python -m build
+
+  sbom:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install cyclonedx-bom
+      - run: cd agents && pip install -e ".[dev]"
+      - run: cd agents && cyclonedx-py environment -o sbom.json --output-format json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: agents/sbom.json

@@ -433,6 +433,57 @@ This architecture ensures that even if agent code has bugs or unexpected behavio
 
 ---
 
+## Theoretical Justification
+
+This section provides formal justification for the core architectural decisions in the brain system, grounding each in established computer science and software engineering principles.
+
+### 1. Frozen Brains -- Read-Only Governance
+
+The decision to make brains immutable during execution is rooted in well-established principles:
+
+- **Configuration vs State separation** (Fowler 2003) -- Configuration should be immutable during execution. Brains are *configuration* (how to behave); project data is *state* (what is being worked on). Mixing the two leads to the same class of defects as mutable global configuration: non-reproducible behavior and hidden coupling.
+- **Single-Writer Principle** -- Only humans write brain rules. This eliminates concurrent modification issues entirely -- no distributed consensus protocol is needed for brain updates because there is exactly one writer class (human operators) and writes happen outside of agent sessions.
+- **Referential transparency** -- Given the same task input, a frozen brain always provides the same guidance. There is no hidden mutable state that could cause the same query to yield different rules at different times within a session.
+- **Formal property**: For any brain B and time t1, t2 during a session: `B(t1) = B(t2)` (brain immutability invariant). This guarantee simplifies reasoning about agent behavior -- you can always explain *why* an agent acted a certain way by inspecting the brain snapshot it loaded.
+
+### 2. Single Orchestrator (CEO) vs Peer-to-Peer
+
+A single orchestrator (CEO Brain) routes all tasks rather than allowing brains to communicate peer-to-peer:
+
+- **Star topology** eliminates O(n^2) communication paths between n brains. The CEO pattern maintains O(n) paths -- each specialist communicates only with the CEO, not with every other specialist.
+- **CAP theorem implication** -- With a single orchestrator, we achieve strong consistency in task routing. There is no split-brain problem because there is exactly one decision-maker for task decomposition and delegation.
+- **Centralized scheduling** enables global optimization (e.g., dependency ordering, resource balancing) that is impossible with local greedy decisions made independently by each specialist.
+- **Leader-based consensus** (Ongaro & Ousterhout 2014, Raft) -- The CEO acts as the single leader; specialists are followers. This mirrors the Raft consensus model where a single leader simplifies state management and eliminates election complexity.
+- **Trade-off acknowledged**: The CEO is a single point of failure -- if it is unavailable, no tasks are routed. This is mitigated by the CEO being stateless: a restart achieves full recovery with no data loss, since all durable state lives in Supabase and project folders.
+
+### 3. Supabase as Shared Memory vs Local Files
+
+The choice to use Supabase (PostgreSQL) as the shared memory layer rather than local files:
+
+- **Shared-nothing architecture** -- Agents do not share in-process state. Supabase serves as the explicit shared memory bus, making all inter-agent data exchange visible and auditable.
+- **ACID guarantees** -- PostgreSQL provides serializability for concurrent agent writes. When multiple specialists log experiences simultaneously, ACID transactions prevent lost updates, dirty reads, and write conflicts.
+- **Cross-session durability** -- Experiences and patterns survive agent restarts, crashes, and session boundaries. This is not achievable with in-memory state and is fragile with uncoordinated local file writes.
+- **Trade-off**: Every memory operation incurs network latency. This is mitigated by a write-behind pattern -- agents log locally first, then sync to Supabase asynchronously -- ensuring that database latency does not block task execution.
+
+### 4. Tool Use vs Direct Execution
+
+Agents interact with the outside world exclusively through registered tool handlers:
+
+- **Principle of least privilege** -- Agents can only perform actions that their registered tools allow. This is capability-based security: the tool registry is the capability set, and anything not in the registry is forbidden by default.
+- **Audit trail** -- Every tool call is logged with its inputs and outputs, providing full traceability. This makes it possible to reconstruct exactly what an agent did, when, and why.
+- **Sandboxing** -- Tool handlers enforce boundaries that the LLM cannot bypass. For example, a file-write tool can restrict the target directory, a network tool can whitelist allowed endpoints, and a database tool can enforce row-level security -- none of which the LLM can circumvent.
+
+### 5. Brain-per-Domain vs Monolithic Prompt
+
+Each brain owns a single domain rather than combining all guidance into one monolithic prompt:
+
+- **Separation of concerns** (Dijkstra 1974) -- Each brain encapsulates one domain of expertise, enabling independent evolution. Updating the design brain's typography rules requires zero coordination with the engineering brain.
+- **Context window efficiency** -- Only the relevant brain(s) are loaded for a given task instead of all 37 simultaneously. This preserves context window budget for actual task content rather than consuming it with irrelevant guidance.
+- **Bounded context** (Evans 2003, Domain-Driven Design) -- Each brain is a bounded context with its own ubiquitous language. The "component" concept in the design brain (UI element) is distinct from "component" in the engineering brain (service module), and each brain defines its terms without ambiguity.
+- **Formal property**: For brain set {B1, ..., Bn}, modifications to Bi require zero changes to Bj (j != i). Brains are independently deployable units with no cross-brain coupling at the rule level.
+
+---
+
 ## Why This Architecture
 
 | Benefit | Explanation |

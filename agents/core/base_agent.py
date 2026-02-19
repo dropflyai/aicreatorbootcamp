@@ -1,12 +1,13 @@
 """Base agent class for all Prototype X1000 agents."""
 
 import os
+import time
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
 import anthropic
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 from .brain_loader import BrainLoader
 from .memory_client import AgentRun, Experience, SupabaseMemoryClient
@@ -29,6 +30,15 @@ class AgentResponse(BaseModel):
     success: bool = True
     error: str | None = None
     tokens_used: int = 0
+
+    @model_validator(mode="after")
+    def _validate_consistency(self) -> "AgentResponse":
+        """Prevent illegal states: success=True with error, or success=False without error."""
+        if self.success and self.error is not None:
+            raise ValueError("Cannot have success=True with an error set")
+        if not self.success and not self.error:
+            object.__setattr__(self, "error", "unknown_error")
+        return self
 
 
 class BaseAgent(ABC):
@@ -215,14 +225,24 @@ class BaseAgent(ABC):
 
         try:
             for iteration in range(max_iterations):
-                # Make API call
-                response = self.client.messages.create(
-                    model=self.model,
-                    max_tokens=4096,
-                    system=system_prompt,
-                    messages=messages,
-                    tools=self._tool_definitions if self._tool_definitions else None,
-                )
+                # Adaptive timeout with exponential backoff
+                last_error: Exception | None = None
+                for attempt in range(3):
+                    try:
+                        response = self.client.messages.create(
+                            model=self.model,
+                            max_tokens=4096,
+                            system=system_prompt,
+                            messages=messages,
+                            tools=self._tool_definitions if self._tool_definitions else None,
+                        )
+                        break
+                    except anthropic.APITimeoutError as e:
+                        last_error = e
+                        wait = 2 ** attempt  # 1s, 2s, 4s
+                        time.sleep(wait)
+                else:
+                    raise last_error  # type: ignore[misc]
 
                 total_tokens += response.usage.input_tokens + response.usage.output_tokens
 
