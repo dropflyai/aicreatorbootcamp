@@ -1,8 +1,7 @@
 """Design Agent - UI/UX and visual design specialist."""
 
-from typing import Any, Optional
 
-from ..core.base_agent import BaseAgent, AgentResponse
+from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
 
 
@@ -35,9 +34,9 @@ class DesignAgent(BaseAgent):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
         design_mode: str = "saas",
     ):
@@ -248,7 +247,7 @@ Output format:
         self,
         component_name: str,
         purpose: str,
-        variants: Optional[list[str]] = None,
+        variants: list[str] | None = None,
     ) -> str:
         """Generate a component specification.
 
@@ -301,9 +300,9 @@ Output format:
     def _create_design_tokens(
         self,
         project_name: str,
-        color_palette: Optional[dict] = None,
-        typography: Optional[dict] = None,
-        spacing: Optional[dict] = None,
+        color_palette: dict | None = None,
+        typography: dict | None = None,
+        spacing: dict | None = None,
     ) -> str:
         """Create design tokens for a project.
 
@@ -448,7 +447,7 @@ Output format:
     def _call_engineering_brain(
         self,
         question: str,
-        context: Optional[str] = None,
+        context: str | None = None,
     ) -> str:
         """Delegate a technical question to Engineering agent.
 
@@ -479,10 +478,10 @@ Output format:
         self,
         project_id: str,
         project_name: str,
-        color_tokens: Optional[dict] = None,
-        typography_scale: Optional[dict] = None,
-        spacing_tokens: Optional[dict] = None,
-        signature_move: Optional[str] = None,
+        color_tokens: dict | None = None,
+        typography_scale: dict | None = None,
+        spacing_tokens: dict | None = None,
+        signature_move: str | None = None,
     ) -> str:
         """Save design system to Supabase.
 

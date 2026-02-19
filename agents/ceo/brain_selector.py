@@ -1,6 +1,5 @@
 """Brain selection and routing logic for CEO agent."""
 
-from typing import Any, Optional
 from dataclasses import dataclass
 from enum import Enum
 
@@ -1051,7 +1050,7 @@ class BrainSelector:
             BrainType that should handle this task.
         """
         task_lower = task.lower()
-        scores: dict[BrainType, float] = {bt: 0 for bt in BrainType}
+        scores: dict[BrainType, float] = dict.fromkeys(BrainType, 0)
 
         # Score based on keyword matches
         for keyword, brain_types in self._keyword_index.items():
@@ -1079,7 +1078,7 @@ class BrainSelector:
             List of BrainTypes sorted by relevance.
         """
         task_lower = task.lower()
-        scores: dict[BrainType, float] = {bt: 0 for bt in BrainType}
+        scores: dict[BrainType, float] = dict.fromkeys(BrainType, 0)
 
         # Score based on keyword matches
         for keyword, brain_types in self._keyword_index.items():

@@ -1,8 +1,7 @@
 """Load brain CLAUDE.md files as context for agents."""
 
-from pathlib import Path
-from typing import Optional
 import re
+from pathlib import Path
 
 
 class BrainLoader:
@@ -154,7 +153,7 @@ class BrainLoader:
     def build_system_prompt(
         self,
         brain_name: str,
-        additional_context: Optional[str] = None,
+        additional_context: str | None = None,
     ) -> str:
         """Build a complete system prompt for an agent using brain guidance.
 

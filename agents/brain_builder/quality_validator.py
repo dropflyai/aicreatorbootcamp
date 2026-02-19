@@ -1,9 +1,8 @@
 """Quality validation for generated brains."""
 
-from typing import Any, Optional
-from pathlib import Path
-from dataclasses import dataclass, field
 import re
+from dataclasses import dataclass, field
+from pathlib import Path
 
 
 @dataclass
@@ -45,7 +44,7 @@ class QualityValidator:
         "Conflict Resolution",
     ]
 
-    def __init__(self, brains_root: Optional[Path] = None):
+    def __init__(self, brains_root: Path | None = None):
         """Initialize the validator.
 
         Args:

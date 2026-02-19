@@ -34,24 +34,23 @@ Usage:
 __version__ = "0.1.0"
 
 # Core components
-from .core import BaseAgent, BrainLoader, SupabaseMemoryClient
-
-# CEO Agent
-from .ceo import CEOAgent, TaskDecomposer, BrainSelector
-
-# Specialist Agents
-from .specialists import (
-    EngineeringAgent,
-    DesignAgent,
-    MBAAgent,
-    SpecialistFactory,
-)
-
 # Brain Builder
 from .brain_builder import BrainBuilderAgent, QualityValidator
 
+# CEO Agent
+from .ceo import BrainSelector, CEOAgent, TaskDecomposer
+from .core import BaseAgent, BrainLoader, SupabaseMemoryClient
+
 # Memory System
 from .memory import AutoLogger, PatternExtractor
+
+# Specialist Agents
+from .specialists import (
+    DesignAgent,
+    EngineeringAgent,
+    MBAAgent,
+    SpecialistFactory,
+)
 
 __all__ = [
     # Core

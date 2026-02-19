@@ -1,12 +1,11 @@
 """Brain Builder Agent - Meta-agent for generating new brains."""
 
-import os
-from typing import Any, Optional
 from pathlib import Path
+from typing import Any
 
-from ..core.base_agent import BaseAgent, AgentResponse
+from ..core.base_agent import AgentResponse, BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
-from .quality_validator import QualityValidator, ValidationResult
+from .quality_validator import QualityValidator
 
 
 class BrainBuilderAgent(BaseAgent):
@@ -28,11 +27,11 @@ class BrainBuilderAgent(BaseAgent):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
-        brains_root: Optional[Path] = None,
+        brains_root: Path | None = None,
     ):
         """Initialize the Brain Builder agent.
 
@@ -214,7 +213,7 @@ Process:
         brain_name: str,
         domain: str,
         capabilities: list[str],
-        senior_role: Optional[str] = None,
+        senior_role: str | None = None,
     ) -> str:
         """Generate CLAUDE.md content for a new brain.
 
@@ -360,7 +359,7 @@ This rule applies to ALL work done under this brain.
         self,
         brain_name: str,
         claude_md_content: str,
-        additional_folders: Optional[list[str]] = None,
+        additional_folders: list[str] | None = None,
     ) -> str:
         """Create brain directory structure.
 
@@ -454,8 +453,8 @@ This rule applies to ALL work done under this brain.
         brain_name: str,
         domain: str,
         capabilities: list[str],
-        senior_role: Optional[str] = None,
-        additional_folders: Optional[list[str]] = None,
+        senior_role: str | None = None,
+        additional_folders: list[str] | None = None,
         max_iterations: int = 3,
     ) -> dict[str, Any]:
         """Build a new brain with validation.
@@ -532,7 +531,7 @@ This rule applies to ALL work done under this brain.
     def run(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         max_iterations: int = 10,
     ) -> AgentResponse:
         """Run the Brain Builder on a task.

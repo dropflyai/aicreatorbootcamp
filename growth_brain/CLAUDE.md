@@ -138,14 +138,22 @@ Request: [specific deliverable needed]
 
 ---
 
-## Commit Rule
+## COMMIT RULE (MANDATORY)
 
-**NEVER commit changes without explicit user approval.**
+**After EVERY change, fix, or solution:**
 
-Before any commit, present:
-1. What changed and why
-2. Which growth module was affected
-3. What experiment or learning motivated the change
+1. Stage the changes
+2. Prepare a commit message
+3. **ASK the user:** "Ready to commit these changes?"
+4. Only commit after user approval
+
+```
+NEVER leave changes uncommitted.
+NEVER batch multiple unrelated changes.
+ALWAYS ask before committing.
+```
+
+This rule applies to ALL work done under this brain.
 
 ---
 

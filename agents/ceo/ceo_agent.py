@@ -1,12 +1,11 @@
 """CEO Agent - Master orchestrator for the Prototype X1000 brain system."""
 
-from typing import Any, Optional
 from dataclasses import dataclass, field
 
-from ..core.base_agent import BaseAgent, AgentResponse
+from ..core.base_agent import AgentResponse, BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
-from .task_decomposer import TaskDecomposer, DecomposedTask, SubTask
 from .brain_selector import BrainSelector, BrainType
+from .task_decomposer import TaskDecomposer
 
 
 @dataclass
@@ -41,9 +40,9 @@ class CEOAgent(BaseAgent):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
     ):
         """Initialize the CEO agent.
@@ -171,7 +170,7 @@ You have tools to:
         self,
         brain_type: str,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
     ) -> str:
         """Delegate a task to a specialist brain.
 
@@ -228,7 +227,7 @@ You have tools to:
     def orchestrate(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         skip_decomposition: bool = False,
     ) -> OrchestrationResult:
         """Orchestrate a complex task across multiple brain agents.
@@ -267,7 +266,7 @@ You have tools to:
                 {
                     "task_input": task,
                     "decomposed_tasks": [st.model_dump() for st in decomposed.subtasks],
-                    "delegated_to": list(set(st.required_brain for st in decomposed.subtasks)),
+                    "delegated_to": list({st.required_brain for st in decomposed.subtasks}),
                     "routing_reasoning": decomposed.reasoning,
                 }
             ).execute()
@@ -373,7 +372,7 @@ Subtask results:
     def run(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         max_iterations: int = 10,
     ) -> AgentResponse:
         """Run the CEO agent on a task.

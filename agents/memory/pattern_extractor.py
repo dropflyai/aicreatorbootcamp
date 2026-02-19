@@ -1,10 +1,10 @@
 """Pattern extraction from agent experiences."""
 
-from typing import Any, Optional
-from collections import Counter
 import re
+from collections import Counter
+from typing import Any
 
-from ..core.memory_client import SupabaseMemoryClient, Pattern
+from ..core.memory_client import Pattern, SupabaseMemoryClient
 
 
 class PatternExtractor:
@@ -38,7 +38,7 @@ class PatternExtractor:
 
     def extract_patterns(
         self,
-        brain_type: Optional[str] = None,
+        brain_type: str | None = None,
         limit: int = 100,
     ) -> list[dict[str, Any]]:
         """Extract patterns from recent experiences.
@@ -197,7 +197,7 @@ class PatternExtractor:
 
     def promote_to_shared_patterns(
         self,
-        brain_type: Optional[str] = None,
+        brain_type: str | None = None,
         dry_run: bool = False,
     ) -> list[str]:
         """Promote qualifying patterns to shared_patterns table.
@@ -245,7 +245,7 @@ class PatternExtractor:
     def get_relevant_patterns(
         self,
         task: str,
-        brain_type: Optional[str] = None,
+        brain_type: str | None = None,
         min_observations: int = 2,
     ) -> list[dict[str, Any]]:
         """Get patterns relevant to a task.
@@ -287,7 +287,7 @@ class PatternExtractor:
 
     def analyze_failures(
         self,
-        brain_type: Optional[str] = None,
+        brain_type: str | None = None,
         limit: int = 50,
     ) -> dict[str, Any]:
         """Analyze failure patterns.

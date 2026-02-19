@@ -1,12 +1,12 @@
 """Factory for creating specialist agents."""
 
-from typing import Any, Optional
+from typing import Any
 
 from ..core.base_agent import BaseAgent
 from ..core.brain_loader import BrainLoader
 from ..core.memory_client import SupabaseMemoryClient
-from .engineering_agent import EngineeringAgent
 from .design_agent import DesignAgent
+from .engineering_agent import EngineeringAgent
 from .mba_agent import MBAAgent
 
 
@@ -28,9 +28,9 @@ class SpecialistFactory:
     def create(
         cls,
         brain_type: str,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
-        model: Optional[str] = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
+        model: str | None = None,
         auto_log: bool = True,
         **kwargs: Any,
     ) -> BaseAgent:
@@ -108,7 +108,7 @@ class SpecialistFactory:
         loader = BrainLoader()
         # Combine custom specialists with all brain paths
         all_brains = set(cls.SPECIALISTS.keys()) | set(loader.BRAIN_PATHS.keys())
-        return sorted(list(all_brains))
+        return sorted(all_brains)
 
     # Descriptions for all 37 brains
     BRAIN_DESCRIPTIONS = {
@@ -174,8 +174,8 @@ class SpecialistFactory:
     @classmethod
     def create_all(
         cls,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
     ) -> dict[str, BaseAgent]:
         """Create all available specialist agents.

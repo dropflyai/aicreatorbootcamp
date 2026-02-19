@@ -1,26 +1,25 @@
 """Supabase memory client for agent logging and retrieval."""
 
 import os
-import json
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 from uuid import uuid4
 
-from supabase import create_client, Client
 from pydantic import BaseModel
+from supabase import Client, create_client
 
 
 class Experience(BaseModel):
     """Model for shared_experiences table."""
 
     brain_type: str
-    project_id: Optional[str] = None
+    project_id: str | None = None
     category: str  # success, failure, pattern, learning
     task_summary: str
-    problem: Optional[str] = None
-    solution: Optional[str] = None
-    outcome: Optional[str] = None
-    lessons_learned: Optional[str] = None
+    problem: str | None = None
+    solution: str | None = None
+    outcome: str | None = None
+    lessons_learned: str | None = None
     tags: list[str] = []
 
 
@@ -29,11 +28,11 @@ class AgentRun(BaseModel):
 
     agent_type: str
     task_input: str
-    task_output: Optional[str] = None
+    task_output: str | None = None
     success: bool = False
     tool_calls: list[dict[str, Any]] = []
-    tokens_used: Optional[int] = None
-    model: Optional[str] = None
+    tokens_used: int | None = None
+    model: str | None = None
 
 
 class Pattern(BaseModel):
@@ -43,7 +42,7 @@ class Pattern(BaseModel):
     pattern_name: str
     description: str
     trigger_conditions: list[str] = []
-    solution_template: Optional[str] = None
+    solution_template: str | None = None
     example_usages: list[str] = []
     observation_count: int = 1
     tags: list[str] = []
@@ -54,8 +53,8 @@ class SupabaseMemoryClient:
 
     def __init__(
         self,
-        url: Optional[str] = None,
-        key: Optional[str] = None,
+        url: str | None = None,
+        key: str | None = None,
     ):
         """Initialize the Supabase client.
 
@@ -105,7 +104,7 @@ class SupabaseMemoryClient:
 
     def get_agent_runs(
         self,
-        agent_type: Optional[str] = None,
+        agent_type: str | None = None,
         limit: int = 10,
         success_only: bool = False,
     ) -> list[dict[str, Any]]:
@@ -163,10 +162,10 @@ class SupabaseMemoryClient:
 
     def search_experiences(
         self,
-        brain_type: Optional[str] = None,
-        category: Optional[str] = None,
-        tags: Optional[list[str]] = None,
-        search_text: Optional[str] = None,
+        brain_type: str | None = None,
+        category: str | None = None,
+        tags: list[str] | None = None,
+        search_text: str | None = None,
         limit: int = 10,
     ) -> list[dict[str, Any]]:
         """Search shared experiences.
@@ -244,10 +243,10 @@ class SupabaseMemoryClient:
 
     def find_pattern(
         self,
-        pattern_name: Optional[str] = None,
-        tags: Optional[list[str]] = None,
-        brain_type: Optional[str] = None,
-    ) -> Optional[dict[str, Any]]:
+        pattern_name: str | None = None,
+        tags: list[str] | None = None,
+        brain_type: str | None = None,
+    ) -> dict[str, Any] | None:
         """Find a matching pattern.
 
         Args:
@@ -297,7 +296,7 @@ class SupabaseMemoryClient:
     def get_established_patterns(
         self,
         min_observations: int = 3,
-        brain_type: Optional[str] = None,
+        brain_type: str | None = None,
     ) -> list[dict[str, Any]]:
         """Get patterns that have been observed multiple times.
 
@@ -330,7 +329,7 @@ class SupabaseMemoryClient:
         brain_name: str,
         validation_passed: bool,
         files_created: list[str],
-        validation_errors: Optional[list[str]] = None,
+        validation_errors: list[str] | None = None,
     ) -> str:
         """Log a brain generation attempt.
 
@@ -358,7 +357,7 @@ class SupabaseMemoryClient:
 
     def get_brain_builds(
         self,
-        brain_name: Optional[str] = None,
+        brain_name: str | None = None,
         passed_only: bool = False,
         limit: int = 10,
     ) -> list[dict[str, Any]]:

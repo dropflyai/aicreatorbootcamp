@@ -1,11 +1,11 @@
 """Automatic logging for agent tasks."""
 
-from typing import Any, Callable, Optional
-from datetime import datetime
-from functools import wraps
 import traceback
+from collections.abc import Callable
+from functools import wraps
+from typing import Any
 
-from ..core.memory_client import SupabaseMemoryClient, Experience, AgentRun
+from ..core.memory_client import Experience, SupabaseMemoryClient
 
 
 class AutoLogger:
@@ -22,7 +22,7 @@ class AutoLogger:
         self,
         memory_client: SupabaseMemoryClient,
         brain_type: str,
-        project_id: Optional[str] = None,
+        project_id: str | None = None,
     ):
         """Initialize the auto-logger.
 
@@ -38,12 +38,12 @@ class AutoLogger:
     def log_task(
         self,
         task_summary: str,
-        problem: Optional[str] = None,
-        solution: Optional[str] = None,
-        outcome: Optional[str] = None,
-        lessons_learned: Optional[str] = None,
+        problem: str | None = None,
+        solution: str | None = None,
+        outcome: str | None = None,
+        lessons_learned: str | None = None,
         category: str = "success",
-        tags: Optional[list[str]] = None,
+        tags: list[str] | None = None,
     ) -> str:
         """Log a task completion to shared_experiences.
 
@@ -77,7 +77,7 @@ class AutoLogger:
         self,
         task_summary: str,
         solution: str,
-        tags: Optional[list[str]] = None,
+        tags: list[str] | None = None,
     ) -> str:
         """Log a successful task.
 
@@ -101,7 +101,7 @@ class AutoLogger:
         task_summary: str,
         problem: str,
         lessons_learned: str,
-        tags: Optional[list[str]] = None,
+        tags: list[str] | None = None,
     ) -> str:
         """Log a failed task.
 
@@ -125,8 +125,8 @@ class AutoLogger:
     def wrap_function(
         self,
         func: Callable,
-        extract_summary: Optional[Callable[[Any], str]] = None,
-        extract_tags: Optional[Callable[[Any], list[str]]] = None,
+        extract_summary: Callable[[Any], str] | None = None,
+        extract_tags: Callable[[Any], list[str]] | None = None,
     ) -> Callable:
         """Wrap a function with automatic logging.
 
@@ -141,8 +141,6 @@ class AutoLogger:
 
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            start_time = datetime.utcnow()
-
             # Extract summary
             if extract_summary:
                 try:
@@ -191,8 +189,8 @@ class AutoLogger:
 def auto_log(
     memory_client: SupabaseMemoryClient,
     brain_type: str,
-    summary: Optional[str] = None,
-    tags: Optional[list[str]] = None,
+    summary: str | None = None,
+    tags: list[str] | None = None,
 ) -> Callable:
     """Decorator for automatic task logging.
 
@@ -238,7 +236,7 @@ class AgentLoggerMixin:
     Inherit from this mixin to get automatic logging of all agent runs.
     """
 
-    _memory_client: Optional[SupabaseMemoryClient] = None
+    _memory_client: SupabaseMemoryClient | None = None
     BRAIN_NAME: str = "engineering"
 
     def _auto_log_run(
@@ -246,8 +244,8 @@ class AgentLoggerMixin:
         task: str,
         result: Any,
         success: bool,
-        error: Optional[str] = None,
-    ) -> Optional[str]:
+        error: str | None = None,
+    ) -> str | None:
         """Log an agent run automatically.
 
         Args:

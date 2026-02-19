@@ -2,11 +2,10 @@
 
 import os
 import subprocess
-from typing import Any, Optional
 from pathlib import Path
 
-from ..core.base_agent import BaseAgent, AgentResponse
-from ..core.memory_client import SupabaseMemoryClient, Pattern
+from ..core.base_agent import BaseAgent
+from ..core.memory_client import Pattern, SupabaseMemoryClient
 
 
 class EngineeringAgent(BaseAgent):
@@ -31,11 +30,11 @@ class EngineeringAgent(BaseAgent):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
-        working_directory: Optional[str] = None,
+        working_directory: str | None = None,
     ):
         """Initialize the Engineering agent.
 
@@ -272,7 +271,7 @@ Output quality:
     def _search_code(
         self,
         pattern: str,
-        file_pattern: Optional[str] = None,
+        file_pattern: str | None = None,
     ) -> str:
         """Search for a pattern in the codebase.
 
@@ -313,7 +312,7 @@ Output quality:
     def _call_design_brain(
         self,
         question: str,
-        context: Optional[str] = None,
+        context: str | None = None,
     ) -> str:
         """Delegate a question to the Design agent.
 
@@ -344,8 +343,8 @@ Output quality:
         self,
         problem: str,
         solution: str,
-        tags: Optional[list[str]] = None,
-    ) -> Optional[str]:
+        tags: list[str] | None = None,
+    ) -> str | None:
         """Log a solution pattern for future reference.
 
         Args:

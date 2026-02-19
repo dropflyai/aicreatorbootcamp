@@ -1,6 +1,5 @@
 """Generic specialist agent for brains without custom implementations."""
 
-from typing import Optional
 
 from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
@@ -18,9 +17,9 @@ class GenericSpecialistAgent(BaseAgent):
     def __init__(
         self,
         brain_name: str,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
-        model: Optional[str] = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
+        model: str | None = None,
         auto_log: bool = True,
     ):
         """Initialize the generic specialist agent.

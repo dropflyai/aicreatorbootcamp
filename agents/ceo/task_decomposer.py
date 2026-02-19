@@ -1,8 +1,7 @@
 """Task decomposition for CEO agent."""
 
-from typing import Any, Optional
-from pydantic import BaseModel
 import anthropic
+from pydantic import BaseModel
 
 
 class SubTask(BaseModel):
@@ -170,7 +169,7 @@ Now analyze the following task and provide decomposition:
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: str | None = None,
         model: str = "claude-sonnet-4-20250514",
     ):
         """Initialize the task decomposer.
@@ -182,7 +181,7 @@ Now analyze the following task and provide decomposition:
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model
 
-    def decompose(self, task: str, context: Optional[str] = None) -> DecomposedTask:
+    def decompose(self, task: str, context: str | None = None) -> DecomposedTask:
         """Decompose a task into subtasks.
 
         Args:
@@ -298,7 +297,7 @@ Now analyze the following task and provide decomposition:
         # Keyword matching for quick routing (ordered by specificity)
 
         # Technical brains
-        if any(kw in task_lower for kw in ["ai", "llm", "prompt", "ml", "machine learning"]):
+        if any(kw in task_lower for kw in [" ai ", " ai,", "llm", "prompt", "ml ", "machine learning"]):
             return "ai"
 
         if any(kw in task_lower for kw in ["security", "pentest", "vulnerability", "audit"]):

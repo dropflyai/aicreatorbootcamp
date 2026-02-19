@@ -1,0 +1,31 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^agents/
+      - id: ruff-format
+        files: ^agents/
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        files: ^agents/
+        additional_dependencies: [pydantic>=2.0.0, anthropic>=0.40.0]
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  - repo: local
+    hooks:
+      - id: no-stub-check
+        name: Check for stub files in brains
+        entry: bash -c 'stubs=$(find . -path "./*_brain/*.md" -size -10c 2>/dev/null); if [ -n "$stubs" ]; then echo "Stub files found:"; echo "$stubs"; exit 1; fi'
+        language: system
+        types: [markdown]
+        pass_filenames: false

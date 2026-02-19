@@ -284,9 +284,9 @@ Agent synthesizes → Makes decisions → Writes to project → Logs to database
 
 ---
 
-## CEO Brain Role (Future)
+## CEO Brain Role (Implemented)
 
-When implemented, CEO Brain will:
+CEO Brain currently:
 
 1. **Route tasks** to appropriate specialist brain(s)
 2. **Orchestrate** multi-brain workflows
@@ -388,6 +388,48 @@ result = ceo.orchestrate("Build a landing page with signup form")
 Add to Claude Desktop config for direct tool access.
 
 See `agents/README.md` for full documentation.
+
+---
+
+## Frozen Protocol
+
+Brains are **read-only guidance systems**. The Frozen Protocol enforces this:
+
+1. **BrainLoader reads, never writes** — The `BrainLoader` class opens brain files in read mode only
+2. **Agents never modify brain content** — All agent output goes to project folders or the database
+3. **Brain updates are human-only** — Only human operators update brain rules (rare)
+4. **No runtime state in brains** — Experience logs, decisions, and patterns go to Supabase
+
+### Enforcement
+- `BrainLoader.load_brain()` uses `read_text()` only
+- No brain directory is ever opened for writing by agent code
+- Pre-commit hooks can enforce no accidental brain modifications
+
+---
+
+## Verification Architecture
+
+The system uses a **triple verification protocol** to ensure quality and correctness:
+
+1. **Self-Verification** — Each specialist agent verifies its own output against its brain's quality gates before returning results
+2. **CEO Verification** — The CEO Agent reviews all specialist outputs for consistency, completeness, and alignment with the original task
+3. **Human Verification** — Final approval rests with the human operator; no changes are committed without explicit user approval
+
+This three-layer approach catches errors at multiple levels: domain-specific mistakes at the specialist level, cross-domain inconsistencies at the CEO level, and strategic misalignment at the human level.
+
+---
+
+## Sandbox Architecture
+
+Brain agents execute within **Docker-based sandbox isolation** for safety:
+
+1. **Container Isolation** — Each agent execution runs inside a sandboxed Docker container with limited filesystem access
+2. **Read-Only Brain Mount** — Brain directories are mounted as read-only volumes, enforcing the Frozen Protocol at the OS level
+3. **Network Restrictions** — Sandboxed agents have controlled network access, preventing unauthorized external calls
+4. **Resource Limits** — CPU, memory, and execution time are capped to prevent runaway processes
+5. **Output Capture** — All agent outputs are captured and validated before being written to project folders
+
+This architecture ensures that even if agent code has bugs or unexpected behavior, it cannot corrupt brain files, access unauthorized resources, or cause system-wide damage.
 
 ---
 

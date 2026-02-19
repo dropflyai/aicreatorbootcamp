@@ -1,8 +1,7 @@
 """MBA Agent - Business strategy and operations specialist."""
 
-from typing import Any, Optional
 
-from ..core.base_agent import BaseAgent, AgentResponse
+from ..core.base_agent import BaseAgent
 from ..core.memory_client import SupabaseMemoryClient
 
 
@@ -28,9 +27,9 @@ class MBAAgent(BaseAgent):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
     ):
         """Initialize the MBA agent.
@@ -230,7 +229,7 @@ Output format:
         self,
         company_name: str,
         value_proposition: str,
-        customer_segments: Optional[list[str]] = None,
+        customer_segments: list[str] | None = None,
     ) -> str:
         """Generate a Business Model Canvas.
 
@@ -307,7 +306,7 @@ Output format:
     def _create_swot_analysis(
         self,
         subject: str,
-        context: Optional[str] = None,
+        context: str | None = None,
     ) -> str:
         """Perform SWOT analysis.
 
@@ -457,7 +456,7 @@ Time to recover customer acquisition cost.
         self,
         product_name: str,
         target_market: str,
-        budget: Optional[str] = None,
+        budget: str | None = None,
     ) -> str:
         """Design go-to-market strategy.
 
@@ -557,7 +556,7 @@ Define clear positioning statement:
         decision_type: str,
         decision: str,
         rationale: str,
-        alternatives_considered: Optional[list[str]] = None,
+        alternatives_considered: list[str] | None = None,
     ) -> str:
         """Log a strategic decision to Supabase.
 

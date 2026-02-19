@@ -2,14 +2,15 @@
 
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Optional
-from datetime import datetime
+from collections.abc import Callable
+from typing import Any
 
 import anthropic
 from pydantic import BaseModel
 
 from .brain_loader import BrainLoader
-from .memory_client import SupabaseMemoryClient, AgentRun, Experience
+from .memory_client import AgentRun, Experience, SupabaseMemoryClient
+from .verification import VerificationProtocol
 
 
 class ToolDefinition(BaseModel):
@@ -26,7 +27,7 @@ class AgentResponse(BaseModel):
     content: str
     tool_calls: list[dict[str, Any]] = []
     success: bool = True
-    error: Optional[str] = None
+    error: str | None = None
     tokens_used: int = 0
 
 
@@ -47,9 +48,9 @@ class BaseAgent(ABC):
 
     def __init__(
         self,
-        model: Optional[str] = None,
-        api_key: Optional[str] = None,
-        memory_client: Optional[SupabaseMemoryClient] = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        memory_client: SupabaseMemoryClient | None = None,
         auto_log: bool = True,
     ):
         """Initialize the agent.
@@ -89,16 +90,15 @@ class BaseAgent(ABC):
         self._register_default_tools()
 
         # Load brain guidance
-        self._system_prompt: Optional[str] = None
+        self._system_prompt: str | None = None
 
     @property
-    def memory_client(self) -> Optional[SupabaseMemoryClient]:
+    def memory_client(self) -> SupabaseMemoryClient | None:
         """Get the memory client if available."""
         return self._memory_client
 
-    def _register_default_tools(self) -> None:
+    def _register_default_tools(self) -> None:  # noqa: B027
         """Register tools available to all agents. Override to add more."""
-        pass
 
     def register_tool(
         self,
@@ -124,7 +124,7 @@ class BaseAgent(ABC):
             }
         )
 
-    def get_system_prompt(self, additional_context: Optional[str] = None) -> str:
+    def get_system_prompt(self, additional_context: str | None = None) -> str:
         """Build the system prompt using brain guidance.
 
         Args:
@@ -181,8 +181,9 @@ class BaseAgent(ABC):
     def run(
         self,
         task: str,
-        context: Optional[str] = None,
+        context: str | None = None,
         max_iterations: int = 10,
+        verify: bool = False,
     ) -> AgentResponse:
         """Execute a task with the agent.
 
@@ -190,6 +191,7 @@ class BaseAgent(ABC):
             task: The task to execute.
             context: Additional context for the task.
             max_iterations: Maximum tool use iterations.
+            verify: If True, run post-execution verification protocol.
 
         Returns:
             AgentResponse with results.
@@ -239,6 +241,14 @@ class BaseAgent(ABC):
                         success=True,
                         tokens_used=total_tokens,
                     )
+
+                    # Post-execution verification
+                    if verify:
+                        protocol = VerificationProtocol()
+                        verification = protocol.verify(task)
+                        if not verification.passed:
+                            result.success = False
+                            result.error = f"Verification failed: {'; '.join(verification.errors)}"
 
                     # Auto-log to Supabase
                     if self.auto_log and self._memory_client:
@@ -362,13 +372,13 @@ class BaseAgent(ABC):
         self,
         task_summary: str,
         category: str = "success",
-        problem: Optional[str] = None,
-        solution: Optional[str] = None,
-        outcome: Optional[str] = None,
-        lessons_learned: Optional[str] = None,
-        tags: Optional[list[str]] = None,
-        project_id: Optional[str] = None,
-    ) -> Optional[str]:
+        problem: str | None = None,
+        solution: str | None = None,
+        outcome: str | None = None,
+        lessons_learned: str | None = None,
+        tags: list[str] | None = None,
+        project_id: str | None = None,
+    ) -> str | None:
         """Manually log an experience to shared_experiences.
 
         Args:

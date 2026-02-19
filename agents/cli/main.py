@@ -10,14 +10,13 @@ Usage:
 import os
 import sys
 from pathlib import Path
-from typing import Optional
 
 import click
+from dotenv import load_dotenv
 from rich.console import Console
+from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.table import Table
-from rich.markdown import Markdown
-from dotenv import load_dotenv
 
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -52,7 +51,7 @@ def cli():
 @click.argument("task")
 @click.option("--context", "-c", help="Additional context for the task")
 @click.option("--verbose", "-v", is_flag=True, help="Verbose output")
-def orchestrate(task: str, context: Optional[str], verbose: bool):
+def orchestrate(task: str, context: str | None, verbose: bool):
     """Orchestrate a task across multiple brain agents.
 
     Uses the CEO agent to decompose and route tasks to specialists.
@@ -89,7 +88,7 @@ def orchestrate(task: str, context: Optional[str], verbose: bool):
 
     except Exception as e:
         console.print(f"[red]Error: {str(e)}[/red]")
-        raise click.Abort()
+        raise click.Abort() from e
 
 
 @cli.command()
@@ -98,7 +97,7 @@ def orchestrate(task: str, context: Optional[str], verbose: bool):
 @click.option("--context", "-c", help="Additional context")
 @click.option("--model", "-m", help="Override model")
 @click.option("--direct", "-d", is_flag=True, help="Bypass CEO (direct to specialist)")
-def run(brain: str, task: str, context: Optional[str], model: Optional[str], direct: bool):
+def run(brain: str, task: str, context: str | None, model: str | None, direct: bool):
     """Run a task (routes through CEO Brain by default).
 
     All tasks are orchestrated by CEO Brain unless --direct flag is used.
@@ -136,7 +135,7 @@ def run(brain: str, task: str, context: Optional[str], model: Optional[str], dir
 
         except Exception as e:
             console.print(f"[red]Error: {str(e)}[/red]")
-            raise click.Abort()
+            raise click.Abort() from e
     else:
         # Default: route through CEO Brain
         console.print(Panel(
@@ -170,7 +169,7 @@ def run(brain: str, task: str, context: Optional[str], model: Optional[str], dir
 
         except Exception as e:
             console.print(f"[red]Error: {str(e)}[/red]")
-            raise click.Abort()
+            raise click.Abort() from e
 
 
 @cli.command("build-brain")
@@ -183,7 +182,7 @@ def build_brain(
     brain_name: str,
     domain: str,
     capabilities: tuple,
-    role: Optional[str],
+    role: str | None,
     dry_run: bool,
 ):
     """Build a new specialist brain.
@@ -246,14 +245,14 @@ def build_brain(
 
     except Exception as e:
         console.print(f"[red]Error: {str(e)}[/red]")
-        raise click.Abort()
+        raise click.Abort() from e
 
 
 @cli.command()
 @click.option("--brain", "-b", help="Filter by brain type")
 @click.option("--promote", is_flag=True, help="Promote patterns to shared_patterns")
 @click.option("--analyze-failures", is_flag=True, help="Analyze failure patterns")
-def patterns(brain: Optional[str], promote: bool, analyze_failures: bool):
+def patterns(brain: str | None, promote: bool, analyze_failures: bool):
     """View and manage learned patterns.
 
     Example:
@@ -318,14 +317,14 @@ def patterns(brain: Optional[str], promote: bool, analyze_failures: bool):
 
     except Exception as e:
         console.print(f"[red]Error: {str(e)}[/red]")
-        raise click.Abort()
+        raise click.Abort() from e
 
 
 @cli.command()
 @click.option("--brain", "-b", help="Filter by brain type")
 @click.option("--limit", "-l", default=10, help="Number of runs to show")
 @click.option("--success-only", is_flag=True, help="Only show successful runs")
-def runs(brain: Optional[str], limit: int, success_only: bool):
+def runs(brain: str | None, limit: int, success_only: bool):
     """View recent agent runs.
 
     Example:
@@ -364,14 +363,14 @@ def runs(brain: Optional[str], limit: int, success_only: bool):
 
     except Exception as e:
         console.print(f"[red]Error: {str(e)}[/red]")
-        raise click.Abort()
+        raise click.Abort() from e
 
 
 @cli.command()
 def brains():
     """List all 37 brains and their status."""
-    from agents.specialists import SpecialistFactory
     from agents.core import BrainLoader
+    from agents.specialists import SpecialistFactory
 
     console.print("[bold]Available Brains (37 Total)[/bold]\n")
     console.print("[dim]All tasks route through CEO Brain for orchestration.[/dim]\n")
@@ -418,20 +417,20 @@ def status():
     # Check API key
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if api_key:
-        console.print(f"[green]✓[/green] Anthropic API key configured")
+        console.print("[green]✓[/green] Anthropic API key configured")
     else:
-        console.print(f"[red]✗[/red] Anthropic API key missing")
+        console.print("[red]✗[/red] Anthropic API key missing")
 
     # Check Supabase
     supabase_url = os.environ.get("SUPABASE_URL")
     supabase_key = os.environ.get("SUPABASE_SERVICE_KEY")
     if supabase_url and supabase_key:
-        console.print(f"[green]✓[/green] Supabase configured")
+        console.print("[green]✓[/green] Supabase configured")
     else:
-        console.print(f"[yellow]![/yellow] Supabase not configured (memory disabled)")
+        console.print("[yellow]![/yellow] Supabase not configured (memory disabled)")
 
     # Show paths
-    console.print(f"\n[bold]Paths:[/bold]")
+    console.print("\n[bold]Paths:[/bold]")
     console.print(f"  Brains: {Path(__file__).parent.parent.parent}")
     console.print(f"  Working dir: {Path.cwd()}")
 
