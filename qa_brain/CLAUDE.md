@@ -96,7 +96,7 @@ Cost of fixing = 1x (design) → 10x (dev) → 100x (production)
 | `02_test_strategy/` | Strategy and planning | test_planning.md, test_types.md, coverage.md |
 | `03_automation/` | Test automation at all levels | unit_testing.md, integration_testing.md, e2e_testing.md, visual_testing.md |
 | `04_performance/` | Performance testing and engineering | performance_testing.md, performance_metrics.md, performance_engineering.md |
-| `05_specialized/` | Specialized test disciplines | api_testing.md, mobile_testing.md, accessibility_testing.md |
+| `05_specialized/` | Specialized test disciplines | api_testing.md, mobile_testing.md, accessibility_testing.md, maestro_testing.md |
 | `06_ci_cd/` | Pipeline quality enforcement | quality_gates.md, test_environments.md, release_quality.md |
 | `07_management/` | Quality management and reporting | test_metrics.md, bug_management.md, test_reporting.md |
 | `08_advanced/` | Cutting-edge techniques | chaos_engineering.md, property_based_testing.md, ai_in_testing.md |
@@ -104,6 +104,80 @@ Cost of fixing = 1x (design) → 10x (dev) → 100x (production)
 | `Templates/` | Standardized test artifacts | test_plan_template.md, test_case_template.md, bug_report_template.md, test_strategy_template.md |
 | `eval/` | Quality scoring | QAScore.md, ReviewChecklist.md |
 | `Memory/` | Learning repository | README.md |
+
+---
+
+## Mobile Testing Tools
+
+### Maestro (Primary Mobile UI Testing)
+
+Maestro is the primary tool for mobile app UI testing (iOS and Android).
+
+**Installation:**
+```bash
+curl -Ls "https://get.maestro.mobile.dev" | bash
+```
+
+**Modes:**
+- **Headed**: Runs on physical device or simulator (requires device running)
+- **Headless**: Runs in CI/CD without display (uses Maestro Cloud or local)
+
+**Flow Structure:**
+```yaml
+# .maestro/smoke-test.yaml
+appId: com.example.app
+
+---
+- launchApp
+- assertVisible: "Welcome"
+- tapOn: "Sign In"
+- inputText:
+    id: "email"
+    text: "test@example.com"
+- takeScreenshot: "login-screen"
+```
+
+**Directory Convention:**
+- `.maestro/` - Maestro flow files
+- `.maestro/config.yaml` - Configuration
+- `.maestro/reports/` - Test reports and screenshots
+
+**Running Tests:**
+```bash
+# Headed (requires simulator)
+maestro test .maestro/
+
+# Headless
+maestro test .maestro/ --no-ansi
+
+# Single flow
+maestro test .maestro/login-flow.yaml
+
+# With environment variables
+APP_ID=com.example.app maestro test .maestro/
+```
+
+**Integration with px1000-verify.sh:**
+The unified verification script automatically:
+1. Detects mobile projects (Expo, React Native)
+2. Checks for Maestro installation
+3. Finds `.maestro/`, `maestro/`, or `e2e/maestro/` directories
+4. Runs all flow files
+5. Collects screenshots as evidence
+
+### Playwright (Web Testing)
+
+Playwright is used for web application testing via `triple-verify.py`.
+
+**Usage:**
+```bash
+python3 scripts/automation/triple-verify.py https://example.com
+```
+
+**Verification Levels:**
+1. Level 1: Page loads successfully (status 200)
+2. Level 2: Visual verification (screenshots)
+3. Level 3: Error scanning (console errors, network failures)
 
 ---
 

@@ -356,9 +356,99 @@ When a task requires multiple brains:
 3. **Assign Lead** -- The domain with highest stakes leads
 4. **Define Handoffs** -- Explicit deliverables at each transition
 5. **Set Quality Gates** -- Each handoff includes acceptance criteria
-6. **Execute** -- Run in dependency order, parallelize where possible
+6. **Execute** -- Run in dependency order, PARALLELIZE WHERE POSSIBLE
 7. **Integrate** -- CEO Brain reviews the combined output
 8. **Retrospect** -- Log learnings to Memory
+
+---
+
+## Parallel Agent Spawning — SPEED OPTIMIZATION
+
+**CRITICAL: Spawn agents simultaneously when tasks are independent.**
+
+### When to Parallelize
+```
+Independent tasks (no dependencies) → SPAWN IN PARALLEL
+Dependent tasks (A must complete before B) → SPAWN SEQUENTIALLY
+```
+
+### Parallel Spawning Syntax
+When using the Task tool, spawn multiple agents in a SINGLE message:
+```
+[Task 1: Research Brain - Industry analysis]
+[Task 2: Research Brain - Competitor analysis]
+[Task 3: MBA Brain - Business model]
+[Task 4: Marketing Brain - Demographics]
+... all in ONE message block
+```
+
+### Example: New Project Research Phase
+```
+SPAWN SIMULTANEOUSLY (single message, multiple Task calls):
+├── Task(Research Brain, "Analyze industry: [X]")
+├── Task(Research Brain, "Analyze competitors: [list]")
+├── Task(MBA Brain, "Define business model for: [X]")
+├── Task(Marketing Brain, "Identify target demographics for: [X]")
+├── Task(Finance Brain, "Create cost/revenue model for: [X]")
+├── Task(Product Brain, "Define MVP requirements for: [X]")
+└── Task(Legal Brain, "Identify compliance requirements for: [X]")
+
+WAIT for all to complete.
+SYNTHESIZE results into business plan.
+```
+
+### Anti-Pattern: Sequential When Parallel is Possible
+```
+BAD:
+1. Research industry... wait...
+2. Research competitors... wait...
+3. Define business model... wait...
+(SLOW - unnecessary sequential execution)
+
+GOOD:
+1. Spawn all research agents simultaneously
+2. Wait for all to complete
+3. Synthesize results
+(FAST - parallel execution)
+```
+
+---
+
+## Brain Usage Reporting — MANDATORY
+
+After EVERY task completion, you MUST report which brains were used:
+
+```
+BRAINS USED:
+- CEO Brain: [what it did - orchestration, decisions made]
+- Research Brain: [what it researched]
+- Engineering Brain: [what it built]
+- Design Brain: [what it designed]
+- QA Brain: [what it tested]
+- [etc. for each brain involved]
+```
+
+### Why This Matters
+- Transparency: User knows the system is being used correctly
+- Accountability: Each brain's contribution is documented
+- Debugging: If something fails, we know which brain to fix
+- Learning: Patterns emerge for future optimization
+
+### Example
+```
+BRAINS USED:
+- CEO Brain: Orchestrated task decomposition, delegated to 4 specialists
+- Research Brain: Conducted competitor analysis, identified 5 key players
+- Engineering Brain: Implemented authentication module (auth.ts, 245 lines)
+- QA Brain: Ran verification suite, all tests passed
+- Design Brain: Created login screen mockup, defined component specs
+
+VERIFICATION EVIDENCE:
+- Command run: ./scripts/verify/px1000-verify.sh
+- Exit code: 0
+- Tests passed: 12
+- Tests failed: 0
+```
 
 ### Conflict Resolution Between Brains
 
@@ -377,6 +467,59 @@ When brains disagree (e.g., Engineering says "too complex" but Design says "esse
 ---
 
 ## Operating Modes
+
+### MODE_NEW_PROJECT — RESEARCH FIRST (Highest Priority)
+
+When user says "start a new project", "new business idea", "build X", etc.:
+
+**PHASE 1: Information Gathering**
+```
+1. What is the project/product/business?
+2. What problem does it solve?
+3. Who is the target user/customer?
+4. What are the constraints (time, budget, tech)?
+5. Any existing assets or requirements?
+```
+DO NOT proceed until these questions are answered.
+
+**PHASE 2: Deep Research (Spawn Parallel Agents)**
+```
+SPAWN SIMULTANEOUSLY:
+├── Research Brain Agent 1 → Industry analysis, market size, trends
+├── Research Brain Agent 2 → Competitor landscape, SWOT analysis
+├── MBA Brain Agent → Business model, revenue streams, operations
+├── Marketing Brain Agent → Demographics, positioning, go-to-market
+├── Finance Brain Agent → Cost structure, pricing, funding needs
+├── Product Brain Agent → Feature requirements, MVP scope, roadmap
+└── Legal Brain Agent → Compliance, IP, regulatory considerations
+
+WAIT FOR ALL AGENTS TO COMPLETE BEFORE PROCEEDING.
+```
+
+**PHASE 3: Business Plan Synthesis**
+CEO Brain consolidates all research into comprehensive business plan:
+- Executive summary
+- Market analysis (from Research Brain)
+- Competitive landscape (from Research Brain)
+- Business model (from MBA Brain)
+- Marketing strategy (from Marketing Brain)
+- Financial projections (from Finance Brain)
+- Product requirements (from Product Brain)
+- Legal considerations (from Legal Brain)
+- Implementation roadmap
+- Risk assessment
+
+**PHASE 4: User Approval Gate**
+Present the business plan. WAIT for explicit approval before ANY execution.
+
+**PHASE 5: Execution**
+Only after approval:
+- Engineering Brain builds
+- Design Brain designs
+- QA Brain tests
+- All verification protocols apply
+
+**NEVER skip research. NEVER build without a plan.**
 
 ### MODE_BUILD
 - Building a new product or business from scratch
@@ -432,6 +575,49 @@ Before delivering any output:
 4. **Tradeoff Transparency** -- Explicit about what we gave up?
 5. **Kill Criteria Defined** -- When do we reverse course?
 6. **Action Oriented** -- Clear next steps, owners, deadlines?
+
+---
+
+## Verification Loop — MANDATORY
+
+**VERIFY → FAIL? → FIX → RE-VERIFY → REPEAT UNTIL PASS**
+
+```
+┌─────────────────────────────────────────────────┐
+│                                                 │
+│   Run: ./scripts/verify/px1000-verify.sh        │
+│                    │                            │
+│                    ▼                            │
+│            Exit code = 0?                       │
+│           /            \                        │
+│         YES            NO                       │
+│          │              │                       │
+│          ▼              ▼                       │
+│    CLAIM SUCCESS    FIX ISSUES                  │
+│    (with evidence)      │                       │
+│                         │                       │
+│                    RE-VERIFY ◄──────────────────┤
+│                         │                       │
+│                    (loop until pass)            │
+│                                                 │
+└─────────────────────────────────────────────────┘
+```
+
+### Verification Tools by Project Type
+
+| Project Type | Web Testing | Mobile Testing |
+|--------------|-------------|----------------|
+| Web (Next.js, Vite) | Playwright (triple-verify.py) | N/A |
+| Mobile (Expo, RN) | N/A | Maestro (headed + headless) |
+| Full-stack | Playwright | Maestro |
+| API | Integration tests | N/A |
+
+### Never Skip Verification
+- Exit code 1 = DO NOT claim success
+- Fix the issue
+- Run verification again
+- Repeat until exit code is 0
+- Include evidence in response
 
 ---
 
