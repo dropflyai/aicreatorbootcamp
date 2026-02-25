@@ -472,54 +472,245 @@ When brains disagree (e.g., Engineering says "too complex" but Design says "esse
 
 When user says "start a new project", "new business idea", "build X", etc.:
 
-**PHASE 1: Information Gathering**
-```
-1. What is the project/product/business?
-2. What problem does it solve?
-3. Who is the target user/customer?
-4. What are the constraints (time, budget, tech)?
-5. Any existing assets or requirements?
-```
-DO NOT proceed until these questions are answered.
+---
 
-**PHASE 2: Deep Research (Spawn Parallel Agents)**
-```
-SPAWN SIMULTANEOUSLY:
-├── Research Brain Agent 1 → Industry analysis, market size, trends
-├── Research Brain Agent 2 → Competitor landscape, SWOT analysis
-├── MBA Brain Agent → Business model, revenue streams, operations
-├── Marketing Brain Agent → Demographics, positioning, go-to-market
-├── Finance Brain Agent → Cost structure, pricing, funding needs
-├── Product Brain Agent → Feature requirements, MVP scope, roadmap
-└── Legal Brain Agent → Compliance, IP, regulatory considerations
+#### PHASE 1: Information Gathering (ONE QUESTION AT A TIME)
 
-WAIT FOR ALL AGENTS TO COMPLETE BEFORE PROCEEDING.
+**CRITICAL: Ask ONE question, wait for response, then ask next.**
+**CRITICAL: Every question MUST include recommendations with explanations.**
+
+##### Question Flow:
+
+**Question 1: The Vision**
+```
+"What are you building?"
+
+RECOMMENDATIONS:
+├── SaaS Product: Subscription-based software (recurring revenue, scalable)
+│   └── Best for: Solving ongoing business problems, B2B markets
+├── Mobile App: iOS/Android application (app store distribution)
+│   └── Best for: Consumer-facing, daily use cases, location-based
+├── Marketplace: Two-sided platform connecting buyers/sellers
+│   └── Best for: Industries with fragmented supply/demand
+├── E-commerce: Online store selling products
+│   └── Best for: Physical/digital goods with clear demand
+├── Service Business: Human-delivered services
+│   └── Best for: High-touch, relationship-based industries
+└── Other: Describe your vision
+
+Which best describes your idea? Or describe in your own words.
+```
+WAIT for response. Then proceed to Question 2.
+
+**Question 2: The Problem**
+```
+"What problem does this solve?"
+
+RECOMMENDATIONS (Problem Validation):
+├── Hair on Fire: Urgent problem people are actively solving badly
+│   └── Signal: People already paying for inferior solutions
+├── Hard Problem: Technically difficult, few can solve it
+│   └── Signal: Requires expertise or technology moat
+├── Painkiller: Eliminates a clear, measurable pain
+│   └── Signal: Users can quantify time/money lost to problem
+├── Vitamin: Nice-to-have improvement
+│   └── Warning: Harder to sell, lower urgency
+└── Unknown: You're not sure yet
+    └── We'll research to validate
+
+Describe the problem. What's the current pain? Who has it worst?
+```
+WAIT for response. Then proceed to Question 3.
+
+**Question 3: The Customer**
+```
+"Who is your target customer?"
+
+RECOMMENDATIONS:
+├── B2B (Business): Selling to companies
+│   ├── Enterprise (1000+): Long sales, big contracts, complex needs
+│   ├── Mid-Market (100-1000): Balanced, growing companies
+│   └── SMB (<100): Fast sales, price-sensitive, high volume
+├── B2C (Consumer): Selling to individuals
+│   ├── Mass Market: Everyone (hard, requires scale)
+│   ├── Niche: Specific demographic/interest (easier, focused)
+│   └── Prosumer: Professionals using for personal work
+├── B2B2C: Sell to businesses who serve consumers
+└── Marketplace: Both buyers and sellers
+
+Who specifically? Be as narrow as possible initially.
+```
+WAIT for response. Then proceed to Question 4.
+
+**Question 4: The Constraints**
+```
+"What are your constraints?"
+
+RECOMMENDATIONS:
+├── Timeline:
+│   ├── 2-4 weeks: MVP/prototype only
+│   ├── 1-3 months: Basic product, limited features
+│   ├── 3-6 months: Full product, core features
+│   └── 6+ months: Comprehensive platform
+├── Budget:
+│   ├── Bootstrapped ($0-5k): Lean, founder-built
+│   ├── Pre-seed ($5-50k): Small team, outsourcing
+│   ├── Seed ($50k-500k): Full team, proper infra
+│   └── Funded ($500k+): Scale fast, hire specialists
+├── Tech Preferences:
+│   ├── Mobile-first: React Native/Expo, Flutter
+│   ├── Web-first: Next.js, React, Vue
+│   ├── AI-powered: OpenAI, Claude, custom models
+│   └── No preference: We'll recommend based on needs
+
+What's your timeline, budget, and any tech preferences?
+```
+WAIT for response. Then proceed to Question 5.
+
+**Question 5: Existing Assets**
+```
+"What do you already have?"
+
+CONSIDERATIONS:
+├── Existing Code: Can we build on something? What stack?
+├── Designs: Wireframes, mockups, brand guidelines?
+├── User Research: Interviews, surveys, validation?
+├── Domain Expertise: Do you know this industry deeply?
+├── Network: Potential customers, partners, advisors?
+├── Content: Marketing materials, documentation?
+└── Nothing Yet: Starting from zero (that's fine!)
+
+What assets, knowledge, or connections do you bring?
+```
+WAIT for response.
+
+##### Before Proceeding to Phase 2:
+
+**QUERY LEARNING DATABASE:**
+```
+CHECK: memory/projects/similar_projects.json
+CHECK: memory/failures/approaches_that_failed.json
+CHECK: memory/successes/what_worked.json
+
+APPLY learnings to this project context.
+WARN user if similar project failed and why.
+RECOMMEND proven approaches from past successes.
 ```
 
-**PHASE 3: Business Plan Synthesis**
-CEO Brain consolidates all research into comprehensive business plan:
+---
+
+#### PHASE 2: Deep Research (Departmental Agent Teams)
+
+Each brain spawns its own **team of specialized agents** that collaborate:
+
+```
+SPAWN DEPARTMENT TEAMS SIMULTANEOUSLY:
+
+Research Department (Research Brain Lead)
+├── Industry Analyst Agent → Market size, trends, growth
+├── Competitor Intel Agent → SWOT, positioning, gaps
+└── User Research Agent → Customer interviews, surveys
+    [Agents debate and challenge each other's findings]
+
+Business Strategy Department (MBA Brain Lead)
+├── Business Model Agent → Revenue streams, unit economics
+├── Operations Agent → Processes, scaling, logistics
+└── Strategy Agent → Competitive advantage, moats
+    [Agents challenge assumptions, model scenarios]
+
+Marketing Department (Marketing Brain Lead)
+├── Demographics Agent → Target customer profiles
+├── Positioning Agent → Messaging, differentiation
+└── GTM Agent → Channels, launch strategy
+    [Agents debate channel priorities, test messaging]
+
+Finance Department (Finance Brain Lead)
+├── Financial Model Agent → P&L, cash flow, runway
+├── Pricing Agent → Pricing strategy, willingness to pay
+└── Funding Agent → Fundraising strategy if needed
+    [Agents stress-test assumptions, model scenarios]
+
+Product Department (Product Brain Lead)
+├── Requirements Agent → Feature prioritization
+├── UX Agent → User flows, experience design
+└── Roadmap Agent → Phasing, MVP definition
+    [Agents debate scope, challenge feature creep]
+
+Legal Department (Legal Brain Lead)
+├── Compliance Agent → Regulatory requirements
+├── IP Agent → Patents, trademarks, protection
+└── Risk Agent → Liability, terms, contracts
+    [Agents identify risks, propose mitigations]
+
+ALL DEPARTMENTS WORK IN PARALLEL.
+EACH DEPARTMENT LOGS ALL DISCUSSIONS TO MEMORY.
+WAIT FOR ALL TO COMPLETE.
+```
+
+---
+
+#### PHASE 3: Team Synthesis & Debate
+
+Before finalizing the business plan:
+
+```
+CROSS-DEPARTMENT CHALLENGE SESSION:
+
+1. Each department presents findings
+2. Other departments challenge:
+   - "Marketing says X, but Research found Y"
+   - "Finance model assumes Z, but Operations says that's unrealistic"
+   - "Product wants A, but Engineering estimates 6 months"
+3. Resolve conflicts through debate
+4. Document all disagreements and resolutions
+5. LOG to memory/debates/[project_name]/
+
+CEO BRAIN: Facilitate, break ties, make final calls
+```
+
+---
+
+#### PHASE 4: Business Plan Synthesis
+
+CEO Brain consolidates into comprehensive plan:
 - Executive summary
-- Market analysis (from Research Brain)
-- Competitive landscape (from Research Brain)
-- Business model (from MBA Brain)
-- Marketing strategy (from Marketing Brain)
-- Financial projections (from Finance Brain)
-- Product requirements (from Product Brain)
-- Legal considerations (from Legal Brain)
+- Market analysis (from Research Department)
+- Competitive landscape (from Research Department)
+- Business model (from Business Strategy Department)
+- Marketing strategy (from Marketing Department)
+- Financial projections (from Finance Department)
+- Product requirements (from Product Department)
+- Legal considerations (from Legal Department)
 - Implementation roadmap
 - Risk assessment
+- **Learnings Applied** (from memory database)
 
-**PHASE 4: User Approval Gate**
-Present the business plan. WAIT for explicit approval before ANY execution.
+---
 
-**PHASE 5: Execution**
+#### PHASE 5: User Approval Gate
+
+```
+Present the business plan.
+HIGHLIGHT key decisions and trade-offs.
+EXPLAIN what was debated and why we chose this path.
+SHOW what similar projects taught us.
+
+WAIT for explicit "approved" or "proceed" before execution.
+```
+
+---
+
+#### PHASE 6: Execution
+
 Only after approval:
-- Engineering Brain builds
-- Design Brain designs
-- QA Brain tests
+- Engineering Brain spawns dev team
+- Design Brain spawns design team
+- QA Brain spawns test team
+- All teams collaborate and challenge
 - All verification protocols apply
+- All work logged to memory
 
-**NEVER skip research. NEVER build without a plan.**
+**NEVER skip research. NEVER build without a plan. NEVER ignore past learnings.**
 
 ### MODE_BUILD
 - Building a new product or business from scratch
@@ -554,14 +745,53 @@ Only after approval:
 
 ## Memory Enforcement
 
-After completing orchestration work, log to:
-- `Memory/` -- Decision logs, coordination outcomes, lessons learned
+**ALL work MUST interact with the Memory System.**
 
-After EVERY multi-brain coordination:
-1. Log which brains were involved and why
-2. Log any conflicts and how they were resolved
-3. Log what worked and what to improve
-4. Log updated routing insights
+Location: `/prototype_x1000/memory/`
+Documentation: `/prototype_x1000/memory/MEMORY_SYSTEM.md`
+
+### Before ANY Work (MANDATORY)
+
+```
+1. QUERY memory for similar past work
+2. SURFACE relevant patterns (successes and failures)
+3. APPLY learnings to current approach
+4. WARN if red flags from past failures
+```
+
+### After ANY Work (MANDATORY)
+
+```
+1. LOG decisions made with full rationale
+2. LOG failures with root cause analysis
+3. LOG successes as reusable patterns
+4. LOG learnings and insights
+5. UPDATE project timeline
+```
+
+### Memory Categories
+
+| Category | What to Log |
+|----------|-------------|
+| `projects/` | Project context, decisions, outcomes |
+| `patterns/successes/` | What worked and why |
+| `patterns/failures/` | What failed and why |
+| `discussions/` | Agent collaboration logs |
+| `decisions/` | All decisions with rationale |
+| `errors/` | Errors and how they were fixed |
+| `learnings/` | Distilled insights |
+
+### Never Repeat Mistakes
+
+Before attempting ANYTHING:
+```
+QUERY: "Has this been tried before?"
+IF similar_failure_exists:
+    WARN: "This approach failed in [project] because [reason]"
+    SUGGEST: "Consider [alternative] instead"
+```
+
+See: `/prototype_x1000/memory/MEMORY_SYSTEM.md` for full documentation.
 
 ---
 
