@@ -53,7 +53,7 @@ PREFLIGHT COMPLETE:
 - Making architectural decisions
 - Planning features
 - Debugging issues
-- Deploying anything
+- Testing
 - Any task that creates or modifies files
 
 **Direct response allowed ONLY for:**
@@ -78,16 +78,23 @@ You do NOT do steps 2-6 yourself. CEO Brain orchestrates.
 
 ---
 
-## IF YOU CATCH YOURSELF FREELANCING
+## AICREATORBOOTCAMP-SPECIFIC RULES
 
-If you're about to write code or make decisions without routing through CEO Brain:
+### Creator Types
+Every feature touching creator types must maintain distinct experiences:
+- Entertainer → Lime (#BFFF00)
+- Educator → Blue (#60A5FA)
+- Storyteller → Purple (#A855F7)
 
-1. **STOP immediately**
-2. **Acknowledge the violation**: "I was about to bypass the brain system."
-3. **Re-route**: "Let me route this through CEO Brain instead."
-4. **Proceed correctly**
+### Testing
+- Demo mode must be enabled: `NEXT_PUBLIC_DEMO_MODE=true`
+- E2E tests in `/e2e/*.spec.ts`
+- Run tests: `npm run test:e2e`
 
-This is not shameful — it's the system working. Catching yourself is better than not catching yourself.
+### Target Audience
+- High school students (Gen Z)
+- Dark mode, gamification, engaging
+- Mobile-first, Chromebook-friendly
 
 ---
 
@@ -107,35 +114,6 @@ This is not shameful — it's the system working. Catching yourself is better th
 
 ---
 
-## WHY THIS MATTERS (READ THIS)
-
-Every time you skip the brain system:
-- You don't benefit from past learnings
-- You don't log new learnings
-- You repeat mistakes others have made
-- You drift from the user's actual requirements
-- You create more work for the user to fix
-
-The brain system exists because NO SINGLE AGENT can hold all context. The CEO Brain coordinates specialists who are BETTER at their domains than a generalist.
-
-**Freelancing is not faster. It feels faster but creates rework.**
-
----
-
-## ENFORCEMENT
-
-There is no code that stops you from violating this. The enforcement is:
-
-1. **This file being read first** — Before helpful instincts kick in
-2. **User calling out violations** — When they notice drift
-3. **Your own integrity** — Choosing to follow the system you agreed to
-
-If you read this file and then ignore it, you are making a choice to provide worse service.
-
----
-
----
-
 ## MANDATORY OUTPUT REQUIREMENTS
 
 Every response that involves work MUST include:
@@ -145,28 +123,20 @@ Every response that involves work MUST include:
 BRAINS USED:
 - CEO Brain: [What it did]
 - [Specialist Brain]: [What it did]
-- [Specialist Brain]: [What it did]
 ```
-
-If you cannot list the brains used, you probably bypassed the system.
 
 ### 2. ACTIONS SUMMARY (Required)
 ```
 ACTIONS TAKEN:
 - [Action 1]
 - [Action 2]
-- [Action 3]
 ```
 
 ### 3. SOURCES (Required for Research)
-If any research, web search, or external information was used:
 ```
 SOURCES:
 - [URL or reference]
-- [URL or reference]
 ```
-
-**No sources = no research credibility. Always cite.**
 
 ---
 

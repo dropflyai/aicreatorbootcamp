@@ -395,9 +395,25 @@ insert into badges (name, description, icon, category) values
   ('Dedicated Creator', 'Maintained streak for entire course', 'flame', 'milestone')
 on conflict (name) do nothing;
 
--- Insert a test class for development
-insert into classes (name, code, current_week) values
-  ('Demo Class', 'DEMO-2024', 1)
+-- ============================================
+-- DEMO MODE SETUP
+-- ============================================
+-- Demo Class for testing without requiring signup
+-- When NEXT_PUBLIC_DEMO_MODE=true, users can login as demo user
+-- Demo credentials: demo@aicreatorbootcamp.test / demo123456
+--
+-- The demo user is created dynamically via /api/demo/login
+-- when someone clicks "Try Demo" button (only if DEMO_MODE is enabled)
+
+-- Insert demo class for development/testing
+insert into classes (name, code, current_week, description) values
+  ('Demo Class', 'DEMO-2024', 1, 'Demo class for testing the app without signup. Join code: DEMO-2024')
+on conflict (code) do nothing;
+
+-- Insert additional test classes for development
+insert into classes (name, code, current_week, description) values
+  ('Test Class Alpha', 'TEST-ALPHA', 2, 'Test class for development'),
+  ('Test Class Beta', 'TEST-BETA', 3, 'Another test class for development')
 on conflict (code) do nothing;
 
 -- ============================================

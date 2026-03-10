@@ -16,6 +16,11 @@ venv/
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/playwright-results.json
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/

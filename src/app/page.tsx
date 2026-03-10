@@ -4,7 +4,9 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Sparkles, Film, BookOpen, MessageCircle } from 'lucide-react'
+import { Sparkles, Film, BookOpen, MessageCircle, Play } from 'lucide-react'
+import { isDemoMode } from '@/lib/demo'
+import { createClient } from '@/lib/supabase/client'
 
 const creatorTypes = [
   {
@@ -30,6 +32,8 @@ const creatorTypes = [
 export default function LandingPage() {
   const router = useRouter()
   const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [demoLoading, setDemoLoading] = useState(false)
+  const demoMode = isDemoMode()
 
   const handleTypeSelect = (type: string) => {
     setSelectedType(type)
@@ -37,8 +41,41 @@ export default function LandingPage() {
     if (typeof window !== 'undefined') {
       localStorage.setItem('creatorType', type)
     }
-    // Navigate to first win experience
-    router.push('/start')
+    // Navigate to first win experience with creator type as query param
+    router.push(`/start?type=${type}`)
+  }
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true)
+
+    try {
+      // Call the demo login API to setup/get demo user
+      const response = await fetch('/api/demo/login', {
+        method: 'POST',
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Demo login failed')
+      }
+
+      // Sign in with the demo credentials
+      const supabase = createClient()
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: data.credentials.email,
+        password: data.credentials.password,
+      })
+
+      if (authError) throw authError
+
+      router.push('/home')
+    } catch (err: any) {
+      console.error('Demo login error:', err)
+      alert('Demo login failed. Please try again.')
+    } finally {
+      setDemoLoading(false)
+    }
   }
 
   return (
@@ -109,6 +146,26 @@ export default function LandingPage() {
             })}
           </div>
         </div>
+
+        {/* Demo Mode Button */}
+        {demoMode && (
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleDemoLogin}
+            disabled={demoLoading}
+            className="w-full max-w-md mb-6 p-4 rounded-2xl bg-[#BFFF00]/10 border border-[#BFFF00]/30 hover:bg-[#BFFF00]/20 transition-all duration-200 flex items-center justify-center gap-2 text-[#BFFF00] font-medium disabled:opacity-50"
+          >
+            {demoLoading ? (
+              <span className="animate-pulse">Loading demo...</span>
+            ) : (
+              <>
+                <Play className="w-5 h-5" />
+                Try Demo - No Signup Required
+              </>
+            )}
+          </motion.button>
+        )}
 
         {/* Already have account */}
         <p className="text-white/40">

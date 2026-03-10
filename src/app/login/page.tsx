@@ -4,17 +4,20 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Sparkles } from 'lucide-react'
+import { ArrowLeft, Sparkles, Play } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
+import { isDemoMode } from '@/lib/demo'
 
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [demoLoading, setDemoLoading] = useState(false)
   const [error, setError] = useState('')
+  const demoMode = isDemoMode()
 
   const handleLogin = async () => {
     setLoading(true)
@@ -35,6 +38,39 @@ export default function LoginPage() {
       setError(err.message || 'Invalid email or password')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDemoLogin = async () => {
+    setDemoLoading(true)
+    setError('')
+
+    try {
+      // Call the demo login API to setup/get demo user
+      const response = await fetch('/api/demo/login', {
+        method: 'POST',
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Demo login failed')
+      }
+
+      // Sign in with the demo credentials
+      const supabase = createClient()
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: data.credentials.email,
+        password: data.credentials.password,
+      })
+
+      if (authError) throw authError
+
+      router.push('/home')
+    } catch (err: any) {
+      setError(err.message || 'Demo login failed')
+    } finally {
+      setDemoLoading(false)
     }
   }
 
@@ -102,6 +138,30 @@ export default function LoginPage() {
             >
               Sign in
             </Button>
+
+            {/* Demo Mode Button */}
+            {demoMode && (
+              <>
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-white/10" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-[#161616] px-4 text-white/40">or try it out</span>
+                  </div>
+                </div>
+
+                <Button
+                  variant="secondary"
+                  onClick={handleDemoLogin}
+                  loading={demoLoading}
+                  className="w-full bg-[#BFFF00]/10 border-[#BFFF00]/30 hover:bg-[#BFFF00]/20 text-[#BFFF00]"
+                >
+                  <Play className="w-4 h-4 mr-2" />
+                  Try Demo (No Signup Required)
+                </Button>
+              </>
+            )}
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
