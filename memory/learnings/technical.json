@@ -1,5 +1,28 @@
 {
   "category": "technical",
   "description": "Technical learnings from all projects",
-  "learnings": []
+  "learnings": [
+    {
+      "learning_id": "x2000-learn-001",
+      "date": "2026-03-06T23:30:00Z",
+      "source": "x2000",
+      "category": "technical",
+      "insight": "TypeScript with ESM (NodeNext module resolution) works well for multi-file AI agent architectures",
+      "evidence": "X2000 compiled successfully with 11 modules, 0 type errors",
+      "application": "Use NodeNext module resolution and .js extensions in imports for TypeScript projects",
+      "confidence": "high",
+      "tags": ["typescript", "architecture", "esm"]
+    },
+    {
+      "learning_id": "x2000-learn-002",
+      "date": "2026-03-06T23:30:00Z",
+      "source": "x2000",
+      "category": "technical",
+      "insight": "5-layer guardrails architecture (Input, Action, Runtime, Visibility, Escalation) provides comprehensive safety without blocking legitimate work",
+      "evidence": "Implemented in X2000 guardrails/layers.ts - covers validation, permissions, rate limits, audit, and human-in-the-loop",
+      "application": "Use this 5-layer pattern for any autonomous AI system that needs safety guardrails",
+      "confidence": "high",
+      "tags": ["guardrails", "safety", "architecture", "ai-agents"]
+    }
+  ]
 }

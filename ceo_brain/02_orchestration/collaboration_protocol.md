@@ -2,6 +2,35 @@
 
 How agents work together, challenge each other, and reach the best outcomes.
 
+**Related:** See `/infrastructure/BRAIN_WIRING_MAP.md` for complete inter-brain communication architecture.
+
+---
+
+## MANDATORY: Source Citation Requirement
+
+**ALL claims, proposals, and challenges MUST include sources.**
+
+This is non-negotiable. Unsourced claims are REJECTED.
+
+### Citation Format
+
+```
+CLAIM: [Statement being made]
+SOURCE: [Author/Organization] ([Year]). "[Title]." [Publication/URL]
+RELEVANCE: [How this source supports the claim]
+```
+
+### Source Tiers
+
+| Tier | Source Type | Acceptable For |
+|------|-------------|----------------|
+| **Tier 1** | Peer-reviewed research, official documentation | All claims |
+| **Tier 2** | Industry reports, established publications | Business/market claims |
+| **Tier 3** | Expert blogs, conference talks | Technical insights |
+| **Tier 4** | Internal data, direct observation | Company-specific claims |
+
+**Rule:** Higher-stakes claims require higher-tier sources.
+
 ---
 
 ## Core Principles
@@ -13,12 +42,12 @@ Every proposal must be questioned:
 - "Is there a better way?"
 - "What does the data say?"
 
-### 2. Evidence Over Opinion
-Claims require support:
-- Data from research
-- Examples from past projects
-- Industry benchmarks
-- User feedback
+### 2. Evidence Over Opinion (WITH CITATIONS)
+Claims require support AND sources:
+- Data from research (CITE SOURCE)
+- Examples from past projects (CITE MEMORY LOG)
+- Industry benchmarks (CITE REPORT)
+- User feedback (CITE RESEARCH)
 
 ### 3. Constructive Conflict
 Disagreement is healthy:
@@ -307,3 +336,81 @@ Before any new discussion:
 4. AVOID what failed before
 5. REFERENCE past decisions for consistency
 ```
+
+---
+
+## Collaboration Summary Logging — MANDATORY
+
+After EVERY collaboration, generate a summary log.
+
+### Summary Log Structure
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    COLLABORATION SUMMARY                             │
+├─────────────────────────────────────────────────────────────────────┤
+│  DATE: [YYYY-MM-DD]                                                 │
+│  TOPIC: [Brief description]                                         │
+│  DURATION: [X minutes]                                              │
+│  PARTICIPANTS: [Brain names]                                        │
+│  AGENTS SPAWNED: [Agent names]                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│  DEBATE HIGHLIGHTS:                                                  │
+│  • [Key proposal 1]                                                  │
+│  • [Challenge raised and outcome]                                    │
+│  • [Key insight or adaptation]                                       │
+├─────────────────────────────────────────────────────────────────────┤
+│  DECISION: [Final decision made]                                     │
+│  RATIONALE: [Why this decision]                                      │
+│  CONSENSUS: [% agreement or escalation outcome]                      │
+│  DISSENT: [Any documented disagreement]                              │
+├─────────────────────────────────────────────────────────────────────┤
+│  KEY SOURCES CITED:                                                  │
+│  • [Source 1 with URL]                                               │
+│  • [Source 2 with URL]                                               │
+├─────────────────────────────────────────────────────────────────────┤
+│  ACTION ITEMS:                                                       │
+│  • [Owner]: [Action] (by [deadline])                                 │
+├─────────────────────────────────────────────────────────────────────┤
+│  LEARNINGS CAPTURED:                                                 │
+│  • [Pattern or insight for future use]                               │
+├─────────────────────────────────────────────────────────────────────┤
+│  LOG: /memory/collaborations/[date]-[topic].json                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Full Log Location
+
+Detailed JSON logs: `/memory/collaborations/`
+Summary logs: `/memory/collaborations/summaries/`
+
+### Log Query Syntax
+
+```
+QUERY: "[keyword]" AND participants:"[Brain Name]"
+QUERY: "[keyword]" AND date:">2026-01-01"
+QUERY: challenges.outcome:"ACCEPTED" AND topic:"[keyword]"
+```
+
+---
+
+## Collaboration Quality Metrics
+
+Track these to improve collaboration quality:
+
+| Metric | Target | Meaning |
+|--------|--------|---------|
+| Citation Rate | 100% | All claims have sources |
+| Challenge Rate | >50% | Proposals are questioned |
+| Consensus Rate | >80% | Debates reach agreement |
+| Turn Efficiency | <10 | Turns to resolution |
+| Learning Capture | 100% | Debates produce learnings |
+| Escalation Rate | <10% | CEO intervention needed |
+
+---
+
+## See Also
+
+- `/infrastructure/BRAIN_WIRING_MAP.md` — Complete communication architecture
+- `/ceo_brain/02_orchestration/agent_teams.md` — Department spawning
+- `/ceo_brain/02_orchestration/brain_routing.md` — Brain routing table

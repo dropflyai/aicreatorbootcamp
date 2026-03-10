@@ -1,0 +1,4 @@
+# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/core/memory_client.py
+# hypothesis_version: 6.151.9
+
+['*', 'SUPABASE_SERVICE_KEY', 'SUPABASE_URL', 'agent_runs', 'agent_type', 'brain_builds', 'brain_name', 'brain_type', 'category', 'created_at', 'description', 'example_usages', 'experiences', 'files_created', 'id', 'lessons_learned', 'model', 'observation_count', 'outcome', 'pattern_name', 'patterns', 'problem', 'project_id', 'shared_experiences', 'shared_patterns', 'solution', 'solution_template', 'success', 'tags', 'task_input', 'task_output', 'task_summary', 'tokens_used', 'tool_calls', 'trigger_conditions', 'validation_errors', 'validation_passed']

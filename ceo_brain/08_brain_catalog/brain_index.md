@@ -279,6 +279,21 @@ outputs, which brains it calls, and which brains call it.
 - **Key Outputs:** API docs, dev guides, community plans, DX audits
 - **Calls:** Engineering, Content, Community | **Called By:** CEO, Product, Engineering
 
+### Debugger Brain
+- **Path:** `/prototype_x1000/debugger_brain/`
+- **Specialty:**
+  - Bug analysis and root cause identification
+  - Error pattern recognition
+  - Systematic debugging protocols
+  - Fix verification and regression prevention
+  - **MANDATORY** logging of all bugs to memory
+  - Consultation on similar past bugs
+- **When to Call:** Any bug or error, unexpected behavior, test failures, debugging assistance
+- **Key Outputs:** Bug reports, root cause analyses, fix verification, pattern documentation
+- **Calls These Brains:** Engineering, QA, Design (for UX bugs)
+- **Called By:** CEO, Engineering, QA, all brains when debugging needed
+- **SPECIAL RULE:** Every bug fixed through this brain MUST be logged to memory
+
 ---
 
 ## Category 5: Marketing Channels (5 Brains)

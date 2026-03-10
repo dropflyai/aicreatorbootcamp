@@ -342,3 +342,25 @@ Every team discussion must produce:
   "logged_to": "memory/[department]/discussions/[date]-[topic].json"
 }
 ```
+
+---
+
+## MANDATORY: Source Citations
+
+All team discussions MUST include sources for claims:
+
+```
+CLAIM: [Statement]
+SOURCE: [Author] ([Year]). "[Title]." [URL/Publication]
+RELEVANCE: [How it supports the claim]
+```
+
+Unsourced claims are REJECTED. See `/ceo_brain/02_orchestration/collaboration_protocol.md` for citation tiers.
+
+---
+
+## See Also
+
+- `/infrastructure/BRAIN_WIRING_MAP.md` — Complete inter-brain communication wiring
+- `/ceo_brain/02_orchestration/collaboration_protocol.md` — Debate protocols, source citation
+- `/ceo_brain/02_orchestration/brain_routing.md` — Which brain handles what

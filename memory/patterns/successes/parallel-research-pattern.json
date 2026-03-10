@@ -1,0 +1,31 @@
+{
+  "pattern_id": "parallel-research-001",
+  "name": "Parallel Departmental Research",
+  "category": "process",
+  "description": "Spawn multiple research agents simultaneously to conduct comprehensive analysis before any execution",
+  "when_to_use": "When starting a new project or major initiative that requires business planning",
+  "how_to_apply": [
+    "1. Define the research questions for each department",
+    "2. Spawn all research agents in a single message (parallel execution)",
+    "3. Each department works independently: Research, MBA, Marketing, Finance, Product, Legal",
+    "4. Wait for all to complete",
+    "5. CEO Brain synthesizes findings and resolves conflicts",
+    "6. Present to user for approval before execution"
+  ],
+  "evidence": [
+    {
+      "project_id": "x2000",
+      "result": "Comprehensive research completed in single session",
+      "metrics": {
+        "departments_involved": 7,
+        "research_docs_created": 3,
+        "competitors_analyzed": 11,
+        "execution_mode": "parallel"
+      }
+    }
+  ],
+  "warnings": "Ensure agents don't have dependencies between them when spawning in parallel",
+  "related_patterns": [],
+  "created": "2026-03-06T23:30:00Z",
+  "created_by": "CEO Brain"
+}
