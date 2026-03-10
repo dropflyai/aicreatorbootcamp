@@ -1,0 +1,81 @@
+# PX1000 Agent System -- Local Development Stack
+# Usage: docker compose up -d
+
+version: "3.9"
+
+services:
+  # PostgreSQL 15 -- stores all agent memory
+  supabase-db:
+    image: postgres:15-alpine
+    container_name: px1000-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: px1000
+    ports:
+      - "5432:5432"
+    volumes:
+      - px1000-db-data:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d px1000"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - px1000-net
+
+  # PostgREST -- RESTful API over Postgres (Supabase-compatible)
+  supabase-api:
+    image: postgrest/postgrest:v12.0.2
+    container_name: px1000-api
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://postgres:postgres@supabase-db:5432/px1000
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: postgres
+      PGRST_JWT_SECRET: super-secret-jwt-key-for-local-dev-only
+    ports:
+      - "3000:3000"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    networks:
+      - px1000-net
+
+  # Sandbox -- isolated agent execution environment
+  sandbox:
+    build:
+      context: ./sandbox
+      dockerfile: Dockerfile
+    container_name: px1000-sandbox
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=100M
+    environment:
+      SUPABASE_URL: http://supabase-api:3000
+      SUPABASE_SERVICE_KEY: local-dev-service-key
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 128M
+          cpus: "0.25"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    networks:
+      - px1000-net
+
+volumes:
+  px1000-db-data:
+    driver: local
+
+networks:
+  px1000-net:
+    driver: bridge

@@ -1,0 +1,36 @@
+name: Brain Validation
+on:
+  push:
+    paths: ['*_brain/**']
+  pull_request:
+    paths: ['*_brain/**']
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check no stub files
+        run: |
+          stubs=$(find . -path './*_brain/*.md' -size -10c ! -name '.gitignore' 2>/dev/null || true)
+          if [ -n "$stubs" ]; then
+            echo "Found stub files (< 10 bytes):"
+            echo "$stubs"
+            exit 1
+          fi
+      - name: Check all brains have CLAUDE.md
+        run: |
+          for dir in *_brain/; do
+            if [ ! -f "$dir/CLAUDE.md" ]; then
+              echo "Missing CLAUDE.md in $dir"
+              exit 1
+            fi
+          done
+      - name: Check COMMIT RULE exists
+        run: |
+          for f in *_brain/CLAUDE.md; do
+            if ! grep -q "COMMIT RULE" "$f"; then
+              echo "Missing COMMIT RULE in $f"
+              exit 1
+            fi
+          done

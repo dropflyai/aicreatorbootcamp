@@ -1,0 +1,4 @@
+# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/brain_builder/quality_validator.py
+# hypothesis_version: 6.151.9
+
+[100.0, 100, 1000, '- ', 'ASK the user', 'Absolute Rules', 'Authority Hierarchy', 'CLAUDE.md', 'COMMIT RULE', 'Calling Other Brains', 'Conflict Resolution', 'FIXME', 'Identity', 'Memory', 'Memory Enforcement', 'Stop Conditions', 'XXX', '\\[PLACEHOLDER\\]', '\\[TODO\\]', '^## (.+)$', 'engineering', 'expert', 'specialist', 'utf-8']
