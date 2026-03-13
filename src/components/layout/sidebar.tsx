@@ -96,11 +96,14 @@ export function Sidebar({ user }: SidebarProps) {
               <Settings className="w-4 h-4" />
               Settings
             </Link>
-            <button
-              className="flex items-center justify-center px-3 py-2 rounded-lg bg-white/5 text-white/60 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+            <form action="/auth/signout" method="post">
+              <button
+                type="submit"
+                className="flex items-center justify-center px-3 py-2 rounded-lg bg-white/5 text-white/60 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </form>
           </div>
         </div>
       )}

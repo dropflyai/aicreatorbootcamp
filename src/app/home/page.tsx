@@ -29,7 +29,7 @@ async function getHomeData() {
     .eq('user_id', user.id)
     .single()
 
-  const classData = membership?.class as { id?: string; current_week?: number } | null
+  const classData = (Array.isArray(membership?.class) ? membership.class[0] : membership?.class) as { id?: string; current_week?: number } | null
 
   // Get recent activities
   const { data: activities } = await supabase
@@ -98,7 +98,7 @@ export default async function HomePage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardDescription>WEEK {classData?.current_week || 1}</CardDescription>
-                <CardTitle>Video That Stops the Scroll</CardTitle>
+                <CardTitle>Your Creator Journey</CardTitle>
               </div>
               <LevelBadge level={profile?.level || 1} />
             </div>
@@ -120,22 +120,24 @@ export default async function HomePage() {
             <CardDescription>NEXT UP</CardDescription>
             <CardTitle className="flex items-center gap-2">
               <Play className="w-5 h-5 text-[#BFFF00]" />
-              Session 2: Filming & Editing
+              Continue your lessons
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-white/60 mb-4">
-              Learn phone filming basics, lighting, and CapCut editing essentials.
+              Pick up where you left off and keep building your creator skills.
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-white/40">
                 <Users className="w-4 h-4" />
-                <span>3/25 classmates have started</span>
+                <span>Week {classData?.current_week || 1} of 10</span>
               </div>
-              <Button size="sm">
-                Start
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+              <Link href="/learn">
+                <Button size="sm">
+                  Start
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>
@@ -144,19 +146,18 @@ export default async function HomePage() {
         <Card className="mb-6">
           <CardHeader>
             <CardDescription>WEEKLY CHALLENGE</CardDescription>
-            <CardTitle>&quot;60-Second Banger&quot;</CardTitle>
+            <CardTitle>Week {classData?.current_week || 1} Challenge</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-white/60 mb-4">
-              Create a short-form video with a scroll-stopping hook.
+              Complete this week&apos;s challenge to earn bonus XP.
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <span className="text-sm text-white/40">12/25 submitted</span>
-                <span className="text-sm text-white/40">Due: Friday</span>
+                <span className="text-sm text-white/40">{projectCount} project{projectCount !== 1 ? 's' : ''} submitted</span>
               </div>
-              <Link href="/gallery" className="text-sm text-[#BFFF00] hover:underline">
-                View Gallery →
+              <Link href="/challenges" className="text-sm text-[#BFFF00] hover:underline">
+                View Challenges →
               </Link>
             </div>
           </CardContent>
@@ -188,7 +189,10 @@ export default async function HomePage() {
                           <>🟢 <span className="text-white">{activity.user?.name}</span> just hit Level {activity.data?.level}</>
                         )}
                         {activity.activity_type === 'project_submitted' && (
-                          <>✨ <span className="text-white">{activity.user?.name}</span> submitted a new project</>
+                          <>✨ <span className="text-white">{activity.user?.name}</span> submitted &ldquo;{activity.data?.project_title || 'a new project'}&rdquo;</>
+                        )}
+                        {activity.activity_type === 'lesson_completed' && (
+                          <>📚 <span className="text-white">{activity.user?.name}</span> completed &ldquo;{activity.data?.lesson_title || 'a lesson'}&rdquo; +{activity.data?.xp} XP</>
                         )}
                         {activity.activity_type === 'badge_earned' && (
                           <>🏆 <span className="text-white">{activity.user?.name}</span> earned {activity.data?.badge_name}</>

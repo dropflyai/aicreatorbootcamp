@@ -72,8 +72,8 @@ export default function OnboardingPage() {
       }
 
       router.push('/home')
-    } catch (error) {
-      console.error('Error saving onboarding data:', error)
+    } catch {
+      // Onboarding save failed silently — user can update later in settings
     } finally {
       setLoading(false)
     }

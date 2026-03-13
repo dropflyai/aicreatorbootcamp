@@ -124,7 +124,7 @@ async function getLearnData() {
     .select('*')
     .eq('user_id', user.id)
 
-  const classData = membership?.class as { current_week?: number } | null
+  const classData = (Array.isArray(membership?.class) ? membership.class[0] : membership?.class) as { current_week?: number } | null
   const currentWeek = classData?.current_week || 1
 
   return {
@@ -244,7 +244,7 @@ export default async function LearnPage() {
                     {/* Week Challenge */}
                     <div className="mt-4 pt-4 border-t border-white/10">
                       <Link
-                        href={`/challenges/${week.week}`}
+                        href="/challenges"
                         className="flex items-center justify-between text-sm"
                       >
                         <div className="flex items-center gap-2">

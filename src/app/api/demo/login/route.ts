@@ -97,7 +97,7 @@ export async function POST() {
         .eq('code', DEMO_CLASS.code)
         .single()
 
-      let classId: string
+      let classId: string | undefined
 
       if (!existingClass) {
         // Create demo class
@@ -121,7 +121,7 @@ export async function POST() {
       }
 
       // Add demo user to demo class
-      if (classId!) {
+      if (classId) {
         await supabaseAdmin.from('class_members').upsert(
           {
             class_id: classId,

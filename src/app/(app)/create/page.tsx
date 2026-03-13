@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Upload, Link as LinkIcon, X, Sparkles, ArrowRight } from 'lucide-react'
+import { Upload, Link as LinkIcon, X, Sparkles, ArrowRight, CheckCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -25,6 +25,71 @@ export default function CreatePage() {
   const [contentUrl, setContentUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'done' | 'error'>('idle')
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadedFileName, setUploadedFileName] = useState('')
+  const [isDragOver, setIsDragOver] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const uploadFile = useCallback(async (file: File) => {
+    setUploadStatus('uploading')
+    setUploadProgress(0)
+    setUploadedFileName(file.name)
+    setError('')
+
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      // Use XHR for progress tracking
+      const url = await new Promise<string>((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', '/api/upload')
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            setUploadProgress(Math.round((e.loaded / e.total) * 100))
+          }
+        }
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const data = JSON.parse(xhr.responseText)
+            resolve(data.url)
+          } else {
+            const data = JSON.parse(xhr.responseText)
+            reject(new Error(data.error || 'Upload failed'))
+          }
+        }
+        xhr.onerror = () => reject(new Error('Network error during upload'))
+        xhr.send(formData)
+      })
+
+      setContentUrl(url)
+      setUploadProgress(100)
+      setUploadStatus('done')
+    } catch (err: any) {
+      setUploadStatus('error')
+      setError(err.message || 'Upload failed')
+    }
+  }, [])
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) uploadFile(file)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file) uploadFile(file)
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = () => setIsDragOver(false)
 
   const handleSubmit = async () => {
     if (!title.trim() || !contentUrl.trim()) {
@@ -52,7 +117,7 @@ export default function CreatePage() {
         .single()
 
       // Create project
-      const { error: insertError } = await supabase
+      const { data: project, error: insertError } = await supabase
         .from('projects')
         .insert({
           user_id: user.id,
@@ -62,7 +127,10 @@ export default function CreatePage() {
           content_url: contentUrl.trim(),
           project_type: projectType,
           status: 'submitted',
+          submitted_at: new Date().toISOString(),
         })
+        .select('id')
+        .single()
 
       if (insertError) throw insertError
 
@@ -71,7 +139,25 @@ export default function CreatePage() {
         p_user_id: user.id,
         p_amount: 25,
         p_source: 'project_submitted',
+        p_reference_id: project?.id ?? null,
       })
+
+      // Log activity
+      if (membership?.class_id) {
+        await supabase.from('activities').insert({
+          user_id: user.id,
+          class_id: membership.class_id,
+          activity_type: 'project_submitted',
+          data: {
+            project_id: project?.id,
+            project_title: title.trim(),
+            project_type: projectType,
+          },
+        })
+      }
+
+      // Check and award any newly earned badges (fire-and-forget)
+      fetch('/api/badges', { method: 'POST' }).catch(() => {})
 
       router.push('/gallery')
     } catch (err: any) {
@@ -239,10 +325,60 @@ export default function CreatePage() {
                 </div>
 
                 {/* Upload Area */}
-                <div className="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-white/20 transition-colors cursor-pointer">
-                  <Upload className="w-8 h-8 text-white/40 mx-auto mb-3" />
-                  <p className="text-white/60 mb-1">Drop your file here or click to upload</p>
-                  <p className="text-sm text-white/40">Max 100MB</p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="video/mp4,video/webm,video/quicktime,image/jpeg,image/png,image/gif,image/webp,audio/mpeg,audio/wav,audio/ogg"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+                    isDragOver
+                      ? 'border-[#BFFF00]/60 bg-[#BFFF00]/5'
+                      : uploadStatus === 'done'
+                        ? 'border-[#BFFF00]/40 bg-[#BFFF00]/5'
+                        : 'border-white/10 hover:border-white/20'
+                  }`}
+                >
+                  {uploadStatus === 'idle' && (
+                    <>
+                      <Upload className="w-8 h-8 text-white/40 mx-auto mb-3" />
+                      <p className="text-white/60 mb-1">Drop your file here or click to upload</p>
+                      <p className="text-sm text-white/40">Images & videos · Max 50MB</p>
+                    </>
+                  )}
+                  {uploadStatus === 'uploading' && (
+                    <>
+                      <Loader2 className="w-8 h-8 text-[#BFFF00] mx-auto mb-3 animate-spin" />
+                      <p className="text-white/60 mb-2 text-sm truncate max-w-xs mx-auto">{uploadedFileName}</p>
+                      <div className="w-full bg-white/10 rounded-full h-1.5 max-w-xs mx-auto">
+                        <div
+                          className="bg-[#BFFF00] h-1.5 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
+                      <p className="text-xs text-white/40 mt-2">{uploadProgress}%</p>
+                    </>
+                  )}
+                  {uploadStatus === 'done' && (
+                    <>
+                      <CheckCircle className="w-8 h-8 text-[#BFFF00] mx-auto mb-3" />
+                      <p className="text-white/80 mb-1 text-sm font-medium">{uploadedFileName}</p>
+                      <p className="text-xs text-white/40">Click to replace</p>
+                    </>
+                  )}
+                  {uploadStatus === 'error' && (
+                    <>
+                      <Upload className="w-8 h-8 text-[#FF6B6B] mx-auto mb-3" />
+                      <p className="text-white/60 mb-1">Upload failed — click to retry</p>
+                      <p className="text-sm text-white/40">Images & videos · Max 50MB</p>
+                    </>
+                  )}
                 </div>
 
                 {error && (

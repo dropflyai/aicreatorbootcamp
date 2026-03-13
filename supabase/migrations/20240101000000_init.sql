@@ -323,6 +323,9 @@ create policy "Class members can view activities"
     )
   );
 
+create policy "Users can insert own activities"
+  on activities for insert with check (user_id = auth.uid());
+
 -- ============================================
 -- STEP 4: CREATE FUNCTIONS AND TRIGGERS
 -- ============================================

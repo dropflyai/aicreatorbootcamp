@@ -323,6 +323,9 @@ create policy "Class members can view activities"
     )
   );
 
+create policy "Users can insert own activities"
+  on activities for insert with check (user_id = auth.uid());
+
 -- ============================================
 -- STEP 4: CREATE FUNCTIONS AND TRIGGERS
 -- ============================================
@@ -429,3 +432,30 @@ create index if not exists idx_activities_class_id on activities(class_id);
 create index if not exists idx_activities_created_at on activities(created_at desc);
 create index if not exists idx_class_members_user_id on class_members(user_id);
 create index if not exists idx_xp_transactions_user_id on xp_transactions(user_id);
+
+-- ============================================
+-- STEP 7: STORAGE BUCKET FOR PROJECT MEDIA
+-- ============================================
+
+-- Storage bucket for project media (videos, images, audio)
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES (
+  'project-media',
+  'project-media',
+  true,
+  52428800, -- 50MB limit
+  ARRAY['video/mp4', 'video/webm', 'video/quicktime', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'audio/mpeg', 'audio/wav', 'audio/ogg']
+) ON CONFLICT (id) DO NOTHING;
+
+-- RLS policies for storage
+CREATE POLICY "Users can upload their own media" ON storage.objects
+  FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'project-media' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Anyone can view project media" ON storage.objects
+  FOR SELECT TO public
+  USING (bucket_id = 'project-media');
+
+CREATE POLICY "Users can delete their own media" ON storage.objects
+  FOR DELETE TO authenticated
+  USING (bucket_id = 'project-media' AND auth.uid()::text = (storage.foldername(name))[1]);

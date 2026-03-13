@@ -95,7 +95,7 @@ async function getChallengesData() {
     .eq('user_id', user.id)
     .not('challenge_id', 'is', null)
 
-  const classData = membership?.class as { current_week?: number } | null
+  const classData = (Array.isArray(membership?.class) ? membership.class[0] : membership?.class) as { current_week?: number } | null
   const currentWeek = classData?.current_week || 1
 
   return {
@@ -149,7 +149,7 @@ export default async function ChallengesPage() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
-                    <span>12 submitted</span>
+                    <span>{submittedWeeks.filter(w => w === currentWeek).length > 0 ? 'Submitted' : 'Not submitted'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
