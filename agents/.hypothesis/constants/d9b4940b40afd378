@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/specialists/engineering_agent.py
-# hypothesis_version: 6.151.9
-
-[100, '(no output)', '**/*', ':(){:|:&};:', '> /dev/sda', 'Command to execute', 'Content to write', 'call_design_brain', 'chmod 777 /', 'command', 'content', 'context', 'dd if=', 'description', 'engineering', 'file_pattern', 'id', 'integer', 'mkfs', 'object', 'path', 'pattern', 'properties', 'question', 'read_file', 'required', 'rm -rf /', 'rm -rf ~', 'run_command', 'search_code', 'string', 'timeout', 'type', 'utf-8', 'write_file']

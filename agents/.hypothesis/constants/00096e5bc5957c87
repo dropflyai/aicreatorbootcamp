@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/core/base_agent.py
-# hypothesis_version: 6.151.9
-
-[4096, 5000, 'ANTHROPIC_API_KEY', 'AgentResponse', 'after', 'assistant', 'base', 'content', 'description', 'end_turn', 'engineering', 'error', 'input', 'input_schema', 'is_error', 'iteration', 'lessons_learned', 'name', 'role', 'solution', 'success', 'text', 'tool_result', 'tool_use', 'tool_use_id', 'type', 'unknown_error', 'user']

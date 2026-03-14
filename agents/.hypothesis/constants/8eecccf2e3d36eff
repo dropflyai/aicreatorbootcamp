@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/specialists/design_agent.py
-# hypothesis_version: 6.151.9
-
-['\n## Spacing\n', '\n## Typography\n', 'Color definitions', 'Color palette', 'Design context', 'Name of the project', 'Name of the screen', 'Project identifier', 'Spacing system', 'Spacing tokens', 'Typography scale', 'agentic', 'array', 'color_palette', 'color_tokens', 'component_name', 'context', 'create_design_tokens', 'create_screen_spec', 'default', 'description', 'design', 'design_dna', 'id', 'internal', 'items', 'log_design_dna', 'object', 'primary_action', 'project_id', 'project_name', 'properties', 'purpose', 'question', 'required', 'saas', 'screen_name', 'signature_move', 'spacing', 'spacing_tokens', 'string', 'type', 'typography', 'typography_scale', 'variants']

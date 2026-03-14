@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/__init__.py
-# hypothesis_version: 6.151.9
-
-['0.1.0', 'AutoLogger', 'BaseAgent', 'BrainBuilderAgent', 'BrainLoader', 'BrainSelector', 'CEOAgent', 'DesignAgent', 'EngineeringAgent', 'MBAAgent', 'PatternExtractor', 'QualityValidator', 'SpecialistFactory', 'SupabaseMemoryClient', 'TaskDecomposer', '__version__']

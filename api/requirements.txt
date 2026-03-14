@@ -1,9 +1,0 @@
-# REST API Dependencies
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
-python-multipart==0.0.6
-
-# Optional dependencies for extended functionality
-# supabase==2.0.2  # Uncomment if using Supabase integration
-# httpx==0.25.2     # For async HTTP requests

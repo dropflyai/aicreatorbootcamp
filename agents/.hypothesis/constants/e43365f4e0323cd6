@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/ceo/ceo_agent.py
-# hypothesis_version: 6.151.9
-
-[500, 1000, 4096, 'Dependencies not met', 'Error', 'The task to delegate', 'brain_type', 'ceo', 'ceo_task_delegations', 'child_agent', 'completion_summary', 'content', 'context', 'decomposed_tasks', 'delegate_to_brain', 'delegated_to', 'description', 'design', 'engineering', 'enum', 'main', 'mba', 'object', 'options_trading', 'parent_agent', 'product', 'properties', 'required', 'result_summary', 'role', 'routing_reasoning', 'string', 'success', 'task', 'task_description', 'task_input', 'type', 'user']

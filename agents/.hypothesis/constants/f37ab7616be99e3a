@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/core/verification.py
-# hypothesis_version: 6.151.9
-
-[120, '*.bench', '*.jpg', '*.json', '*.lcov', '*.png', '*.xml', '*sast*', '*security*', '--tb=short', '-m', '-v', '.', 'agents', 'auth', 'benchmark_*.json', 'benchmarks', 'check', 'comment', 'coverage', 'coverage.xml', 'database', 'deploy', 'docs', 'evidence', 'formatting', 'full', 'htmlcov/', 'migration', 'minimal', 'mypy', 'mypy: PASSED', 'pytest', 'pytest: PASSED', 'python', 'readme', 'ruff', 'ruff: PASSED', 'scan_results', 'schema', 'screenshots', 'security', 'skip', 'standard', 'test_report', 'tests/', 'typo']

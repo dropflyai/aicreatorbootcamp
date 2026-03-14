@@ -170,20 +170,21 @@ This is not a lecture series. Students create from day one.
 
 **AI Creator Bootcamp was built by practitioners, not academics.**
 
-**[Founder Name], Founder & Program Director**
-[Brief bio — background in AI, content creation, education, or relevant field. 2–3 sentences max.]
+**Rio Allen, Founder & Program Director**
+Rio is the CEO and Founder of DropFly Inc. (www.dropflyai.com), where he architects autonomous AI systems and leads a portfolio of 30+ AI-powered products spanning fintech, health tech, SaaS, and the creator economy. With deep expertise in TypeScript, system architecture, and AI agent design, Rio has built everything from AI trading platforms to multi-channel voice agents — and now he's channeling that experience into closing the AI skills gap for the next generation.
 
-**[Lead Instructor Name], Curriculum Lead**
-[Brief bio — experience with AI tools, teaching, youth programs. 2–3 sentences max.]
+**Erik Scott, Lead Instructor & Curriculum Lead**
+Erik is the Co-Founder and COO of DropFly Inc., where he oversees operations across the company's full product portfolio — including AI-powered platforms for fitness, tax preparation, document management, voice agents, and content creation. Erik brings hands-on, daily experience with the exact AI tools students will learn in this program: Claude for writing and ideation, ElevenLabs for voice generation, Runway and Kling for video production, and the full modern tech stack (Next.js, React, Supabase, TypeScript). His unique combination of operational leadership and technical fluency makes him the ideal instructor to guide high schoolers from "what is AI?" to building professional-quality content portfolios in just 5 weeks.
 
 **Advisory Support**
-- Westchester High School CAP Program Coordinator
-- [Any relevant advisors, partners, or mentors]
+- Westchester High School CAP Program Coordinator (active partnership)
+- DropFly Inc. AI Engineering Team
 
 **Why we're the right team:**
-- We use these tools professionally every day
+- We build and ship AI products professionally every single day
+- Our company runs 30+ live AI-powered applications across multiple industries
 - We know how to make complex technology accessible and exciting for teenagers
-- We have a committed school partner and a ready cohort
+- We have a committed school partner, a ready cohort, and a working platform
 - We're not building theory — we're building a program that runs this spring
 
 *The school has confirmed participation. We're ready to launch.*

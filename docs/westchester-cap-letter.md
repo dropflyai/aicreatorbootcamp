@@ -17,7 +17,7 @@ Los Angeles Unified School District
 
 Dear CAP Program Coordinator,
 
-I am reaching out to introduce **AI Creator Bootcamp** — a free, school-based program that teaches high school students to create professional-quality digital content using today's most powerful AI tools. We are currently seeking to launch our Spring 2026 pilot cohort at Westchester High School, and I believe this program is a strong fit for CAP's career and academic readiness mission.
+My name is **Rio Allen**, CEO and Founder of **DropFly Inc.** (www.dropflyai.com). I am reaching out to introduce **AI Creator Bootcamp** — a free, school-based program that teaches high school students to create professional-quality digital content using today's most powerful AI tools. We are currently seeking to launch our Spring 2026 pilot cohort at Westchester High School, and I believe this program is a strong fit for CAP's career and academic readiness mission.
 
 ---
 
@@ -103,13 +103,13 @@ That's it.
 ## What We Provide (Everything Else)
 
 - Complete curriculum and lesson plans
-- A qualified instructor for all 10 sessions
+- **Erik Scott** — Co-Founder and COO of DropFly Inc. — as your dedicated Lead Instructor for all 10 sessions. Erik brings hands-on, daily experience with every AI tool in the curriculum (Claude, Runway, Kling, ElevenLabs, Midjourney, and more) and combines operational leadership with technical fluency to make AI accessible and exciting for students of all skill levels.
 - All tool subscriptions and platform access for every student
 - Student materials and handouts
 - Certificates of completion
 - Setup, tech support, and program administration
 
-There is no budget ask from the school. Program costs are covered through grant funding and sponsor partnerships.
+There is no budget ask from the school. Program costs are covered through grant funding and sponsor partnerships (budget under $20,000).
 
 ---
 
@@ -133,6 +133,10 @@ Please feel free to reach out by email or reply directly to this letter.
 Thank you for your time and for the work you do connecting Westchester students to meaningful career pathways. I look forward to the possibility of partnering with you.
 
 Sincerely,
+
+**Rio Allen**
+CEO & Founder, DropFly Inc.
+www.dropflyai.com
 
 **AI Creator Bootcamp**
 info@aicreatorbootcamp.com

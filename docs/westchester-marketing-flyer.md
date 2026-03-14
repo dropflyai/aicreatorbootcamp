@@ -100,7 +100,7 @@ Week 9–10 — Capstone Project + Demo Day
 - FREE for all students
 - FREE for the school
 - All tool subscriptions included
-- Instructor provided
+- Led by **Erik Scott**, Co-Founder & COO of DropFly Inc.
 - Certificate awarded at completion
 
 *[Suggested: Green checkmark icons beside each line item. Use a light green-tinted callout box for this section.]*
@@ -152,4 +152,5 @@ If the primary headline above doesn't fit the layout, choose from:
 ---
 
 *AI Creator Bootcamp — Spring 2026 | Westchester High School, LAUSD*
+*A program by DropFly Inc. (www.dropflyai.com)*
 *aicreatorbootcamp.com | info@aicreatorbootcamp.com*

@@ -1,4 +1,0 @@
-# file: /Users/rioallen/Documents/DropFly-OS-App-Builder/DropFly-PROJECTS/prototype_x1000/agents/specialists/mba_agent.py
-# hypothesis_version: 6.151.9
-
-[100, 'Healthy', 'Monthly ARPU', 'Needs improvement', 'Project identifier', 'The decision made', 'To be defined', 'Type of decision', 'Unsustainable', 'What to analyze', 'array', 'budget', 'company_name', 'context', 'create_go_to_market', 'create_swot_analysis', 'customer_segments', 'decision', 'decision_type', 'description', 'gross_margin_percent', 'id', 'items', 'mba', 'number', 'object', 'product_name', 'project_id', 'properties', 'rationale', 'required', 'string', 'subject', 'target_market', 'type', 'value_proposition']
