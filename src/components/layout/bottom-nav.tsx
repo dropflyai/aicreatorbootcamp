@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, BookOpen, Sparkles, User } from 'lucide-react'
+import { Home, BookOpen, Sparkles, Trophy, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { href: '/home', icon: Home, label: 'Home' },
   { href: '/learn', icon: BookOpen, label: 'Learn' },
   { href: '/create', icon: Sparkles, label: 'Create' },
+  { href: '/leaderboard', icon: Trophy, label: 'Board' },
   { href: '/profile', icon: User, label: 'Profile' },
 ]
 
@@ -27,7 +28,7 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex flex-col items-center gap-1 py-2 px-4 transition-colors duration-200',
+                'flex flex-col items-center gap-1 py-2 px-3 transition-colors duration-200',
                 isActive ? 'text-[#BFFF00]' : 'text-white/50 hover:text-white/70'
               )}
             >

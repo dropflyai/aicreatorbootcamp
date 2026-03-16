@@ -66,13 +66,10 @@ export async function POST() {
         if (demoUser) {
           userId = demoUser.id
         } else {
-          // Fallback: try signing in to verify user exists
+          // Fallback: user likely exists, return success
           return NextResponse.json({
             success: true,
-            credentials: {
-              email: DEMO_CREDENTIALS.email,
-              password: DEMO_CREDENTIALS.password,
-            },
+            message: 'Demo login successful',
           })
         }
       } else {
@@ -143,13 +140,10 @@ export async function POST() {
         .eq('id', userId)
     }
 
-    // Return success - client will use credentials to sign in
+    // Return success - client will use local credentials to sign in
     return NextResponse.json({
       success: true,
-      credentials: {
-        email: DEMO_CREDENTIALS.email,
-        password: DEMO_CREDENTIALS.password,
-      },
+      message: 'Demo login successful',
     })
   } catch (error) {
     console.error('Demo login error:', error)

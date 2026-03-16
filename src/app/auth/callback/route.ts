@@ -4,7 +4,12 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
-  const next = requestUrl.searchParams.get('next') || '/home'
+  let next = requestUrl.searchParams.get('next') || '/home'
+
+  // Prevent open redirect — only allow relative paths, block protocol-relative URLs
+  if (!next.startsWith('/') || next.startsWith('//')) {
+    next = '/home'
+  }
 
   if (code) {
     const supabase = await createClient()
